@@ -3,11 +3,8 @@ FROM node:18.12
 WORKDIR /app
 
 COPY package*.json .
-RUN npm install -g pnpm@latest
+RUN npm install
 
 COPY . .
-COPY pnpm-lock.yaml .
-RUN pnpm install
-
 
 CMD ["pnpm","run","dev"]

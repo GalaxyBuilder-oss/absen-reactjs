@@ -9,4 +9,4 @@ RUN npm install --save-dev gh-pages
 
 COPY . .
 
-RUN npm run vite
+RUN npm run dev

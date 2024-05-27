@@ -6,7 +6,7 @@ COPY package*.json .
 RUN npm install -g pnpm@latest
 
 COPY pnpm-lock.yaml .
-RUN pnpm fetch
+RUN pnpm help install
 
 COPY . .
 

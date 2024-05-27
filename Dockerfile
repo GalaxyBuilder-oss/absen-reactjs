@@ -9,4 +9,4 @@ RUN npm install --save-dev gh-pages
 
 COPY . .
 
-CMD ["npm", "run", "dev"]
+ENTRYPOINT ["npm", "run", "dev"]

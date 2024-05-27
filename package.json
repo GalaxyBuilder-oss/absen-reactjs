@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "publishConfig": {
-  "@YOUR-USERNAME:registry": "https://npm.pkg.github.com"
+  "GalaxyBuilder-Oss:registry": "https://npm.pkg.github.com"
 }
   "scripts": {
     "dev": "vite",

@@ -5,10 +5,8 @@ WORKDIR /app
 COPY package*.json .
 RUN npm install
 
+RUN npm install --save-dev gh-pages
+
 COPY . .
 
-RUN npm vite build
-
-RUN npm vite preview
-
-CMD ["pnpm","run","dev"]
+RUN npm run deploy

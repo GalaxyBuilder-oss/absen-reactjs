@@ -3,8 +3,9 @@ FROM node:16
 WORKDIR /app
 
 COPY package*.json .
-RUN npm i
+RUN npm install -g pnpm@latest
+RUN pnpm i
 
 COPY . .
 
-CMD ["npm","run","dev"]
+CMD ["pnpm","run","dev"]

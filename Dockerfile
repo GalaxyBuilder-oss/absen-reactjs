@@ -9,4 +9,4 @@ RUN npm install --save-dev gh-pages
 
 COPY . .
 
-RUN npm run dev
+CMD ["npm", "run", "dev"]

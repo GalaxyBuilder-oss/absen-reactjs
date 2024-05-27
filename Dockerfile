@@ -7,4 +7,8 @@ RUN npm install
 
 COPY . .
 
+RUN npm vite build
+
+RUN npm vite preview
+
 CMD ["pnpm","run","dev"]

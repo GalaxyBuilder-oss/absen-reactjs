@@ -5,9 +5,9 @@ WORKDIR /app
 COPY package*.json .
 RUN npm install -g pnpm@latest
 
+COPY . .
 COPY pnpm-lock.yaml .
 RUN pnpm help install
 
-COPY . .
 
 CMD ["pnpm","run","dev"]

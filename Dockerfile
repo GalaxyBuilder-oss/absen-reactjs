@@ -7,7 +7,7 @@ RUN npm install -g pnpm@latest
 
 COPY . .
 COPY pnpm-lock.yaml .
-RUN pnpm help install
+CMD ["pnpm","install"]
 
 
 CMD ["pnpm","run","dev"]

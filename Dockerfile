@@ -4,7 +4,9 @@ WORKDIR /app
 
 COPY package*.json .
 RUN npm install -g pnpm@latest
-RUN pnpm install
+
+RUN pnpm install -r --offline
+RUN pnpm build
 
 COPY . .
 

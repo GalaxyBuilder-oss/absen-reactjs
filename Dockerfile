@@ -1,12 +1,12 @@
-FROM node:18:alpine
-
-
+FROM node:18.12
 
 WORKDIR /app
 
 COPY package*.json .
-RUN npm i
+RUN npm install
+
+RUN npm install --save-dev gh-pages
 
 COPY . .
 
-CMD ["npm","run","dev"]
+ENTRYPOINT ["npm", "run", "dev"]

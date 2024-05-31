@@ -46,10 +46,10 @@ const App = () => {
       .join("\n");
     const formattedDate = `${days[
       date.getUTCDay()
-    ].toUpperCase()} ${date.getDate()} ${months[
+    ].toUpperCase()}, ${date.getDate()} ${months[
       date.getMonth()
     ].toUpperCase()} ${date.getUTCFullYear()}`;
-    let text = `*SHALAT ${selectedPrayerTime.toUpperCase()} HARI ${formattedDate}*\n\nTidak Hadir:\n${absentList}\n\nIzin:\n\n*Catatan:*\n- *Konfirmasi Kehadiran Atau Izin Lewat Grup*\n- *Maksimal 5 Kali Izin Selama Seminggu, Jika Poin Izin Habis Maka Tidak Bisa Izin Lagi, poin izin akan di reset setelah pembinaan*`;
+    let text = `*SHALAT ${selectedPrayerTime.toUpperCase()} HARI ${formattedDate}*\n\nTidak Hadir:\n${absentList}\n\nIzin:\n\n*Catatan:*\n- *Konfirmasi Kehadiran Atau Izin Lewat Grup*\n- *Jika Poin Izin Habis Maka Tidak Bisa Izin Lagi, poin izin akan di reset setelah pembinaan*`;
     navigator.clipboard.writeText(text);
     alert("Copied Success!");
   };
@@ -74,6 +74,7 @@ const App = () => {
       .catch((e) => {
         console.error(e);
       });
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -84,8 +85,8 @@ const App = () => {
         onShowAbout={handleAboutWindow}
         onShowAdd={handleAddWindow}
       />
-      <main className="mx-4 bg-green-600 px-3 border-green-600">
-        <div className="rounded-lg py-4 bg-white relative">
+      <main className="mx-2 bg-green-600 px-4 border-green-600">
+        <div className="rounded-lg bg-white">
           <ListHead
             newData={fetchData}
             showTime={["Shubuh", "Dzuhur", "Ashar", "Maghrib", "Isya"]}

@@ -3,8 +3,7 @@ import PropsTypes from "prop-types";
 const ListHead = ({ newData, showTime, onShowTimeClick }) => {
   return (
     <div className="flex justify-between items-center p-2 sm:p-4 gap-2">
-      <h3 className="font-semibold xl:font-bold uppercase xl:text-2xl">Nama</h3>
-      <div className="flex justify-between gap-2 text-xs sm:text-sm xl:text-xl">
+      {/* <div className="flex justify-between gap-2 text-xs sm:text-sm xl:text-xl"> */}
         <select
           name="prayTimes"
           className="border rounded-md p-0 sm:px-4"
@@ -22,10 +21,10 @@ const ListHead = ({ newData, showTime, onShowTimeClick }) => {
         >
           Refresh
         </button>
-        <button className="border rounded-md px-2 sm:px-4 hover:bg-gray-300">
+        {/* <button className="border rounded-md px-2 sm:px-4 hover:bg-gray-300">
           Mark All
-        </button>
-      </div>
+        </button> */}
+      {/* </div> */}
     </div>
   );
 };

@@ -1,10 +1,13 @@
-const FormGroup = ({children}) => {
+/* eslint-disable react/prop-types */
 
-    return (
-        <div className="flex gap-2 justify-start align-middle">
-            {children}
-        </div>
-    )
-}
+const FormGroup = ({ children }) => {
+  return (
+    <div className="flex gap-2 justify-between align-middle items-center">
+      <>
+        {children}
+      </>
+    </div>
+  );
+};
 
-export default FormGroup
+export default FormGroup;

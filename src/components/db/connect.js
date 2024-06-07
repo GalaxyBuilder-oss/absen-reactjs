@@ -9,14 +9,14 @@ import { v4 } from "uuid";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDDqf05YtNHJ6FKLAreAPsz1_q90W43v6M",
+  apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
   authDomain: "absensi-pub.firebaseapp.com",
   databaseURL: "https://absensi-pub-default-rtdb.firebaseio.com",
   projectId: "absensi-pub",
   storageBucket: "absensi-pub.appspot.com",
-  messagingSenderId: "495843335501",
-  appId: "1:495843335501:web:742c3ea984b83a1273eb04",
-  measurementId: "G-VYBNECFZM1",
+  messagingSenderId: import.meta.env.VITE_MESSAGING_ID,
+  appId: import.meta.env.VITE_APP_ID,
+  measurementId: import.meta.env.VITE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
@@ -34,8 +34,7 @@ export const addData = (data, num) => {
   const uuid = v4();
   set(ref(db, "users/" + num), {
     id: uuid,
-    name: data.name,
-    checked: false,
+    ...data
   })
     .then(() => {
       // Data saved successfully!

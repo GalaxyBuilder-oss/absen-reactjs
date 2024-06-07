@@ -1,96 +1,78 @@
 import PropTypes from "prop-types";
-import { deleteData, setDBData } from "./db/connect";
 import FormGroup from "./style/FormGroup";
-import { btnDelete, btnEdit } from "./style/style";
+import { PencilSharp, TrashBin } from "react-ionicons";
 
-const ListAbsen = ({ data, newData, onEditShow }) => {
-  const handleCheckboxChange = (id) => {
-    const updatedData = data.map((item) => {
-      if (item.id === id) {
-        return { ...item, checked: !item.checked };
-      }
-      return item;
-    });
-
-    setDBData(updatedData); // Memperbarui data asli
-    newData();
-  };
-
-  // const handleCheckAll = () => {
-  //   const allChecked = Object.keys(checkedItems).length === data.length;
-  //   const newCheckedItems = {};
-
-  //   // Jika semua sudah dicentang, maka hapus semua centang
-  //   if (allChecked) {
-  //     data.forEach((item) => {
-  //       newCheckedItems[item.id] = false;
-  //     });
-  //   } else {
-  //     // Jika belum semua dicentang, maka centang semua
-  //     data.forEach((item) => {
-  //       newCheckedItems[item.id] = true;
-  //     });
-  //   }
-
-  //   setCheckedItems(newCheckedItems);
-  // };
+const ListAbsen = ({ data, setEditData, onEditShow, handleAlpha, handlePermit, handlePresent, handleDelete }) => {
 
   return (
-    <ul className="h-96 xl:h-[430px] flex flex-col gap-2 overflow-y-scroll py-2 xl:text-xl">
-      {data != null && data.length > 1
+    <div className="w-full h-[70vh] flex flex-col gap-2 overflow-y-scroll p-2 xl:text-xl">
+      {data != null && data.length > 0
         ? data
             .sort((a, b) => a.name.localeCompare(b.name))
-            .filter((item) => item.id != 0)
             .map((item, i) => (
-              <li
+              <div
                 key={i}
-                className="border-b sm:px-4 px-2 py-2 flex justify-between hover:bg-gray-200 cursor-pointer relative"
+                className="w-full border p-2 flex flex-col gap-2 hover:bg-gray-200 cursor-pointer relative rounded-md"
               >
-                <span className="sm:hidden">
-                  {item.name.substring(0, 12)}...
-                </span>
-                <span className="hidden sm:inline">
-                  {i + 1 + ". " + item.name}
-                </span>
                 <FormGroup>
-                  <div className="form-input">
-                    <input
-                      required
-                      id="check"
-                      type="checkbox"
-                      name="hadir"
-                      className="size-4"
-                      onChange={() => handleCheckboxChange(item.id)}
-                      checked={item.checked}
-                    />{" "}
-                    <label className="hidden sm:inline">Hadir</label>
-                  </div>
-                  <button className={btnEdit} onClick={onEditShow}>
-                    Edit
-                  </button>
-                  <button
-                    className={btnDelete}
-                    onClick={() => {
-                      deleteData(item.id)
-                        .then(() => {
-                          console.log("Data di tengah array berhasil dihapus.");
-                          newData();
-                        })
-                        .catch((error) => {
-                          console.error(
-                            "Gagal menghapus data di tengah array:",
-                            error
-                          );
-                        });
-                    }}
-                  >
-                    Delete
-                  </button>
+                  <span className="">{i + 1 + ". " + item.name}</span>
                 </FormGroup>
-              </li>
+                <div className="flex justify-between items-center">
+                  <div className="checkbox flex justify-between gap-4">
+                    <FormGroup>
+                      <input
+                        required
+                        id="check"
+                        type="radio"
+                        name={"check-"+i}
+                        className="size-4 accent-green-600"
+                        onChange={(e) => handlePresent(e, item.id)}
+                        checked={item.present}
+                      />{" "}
+                      <label className="">H</label>
+                    </FormGroup>
+                    <FormGroup>
+                      <input
+                        required
+                        id="check"
+                        type="radio"
+                        name={"check-"+i}
+                        className="size-4 accent-yellow-600"
+                        onChange={(e) => handlePermit(e, item.id)}
+                        checked={item.permit}
+                      />{" "}
+                      <label className="">I</label>
+                    </FormGroup>
+                    <FormGroup>
+                      <input
+                        required
+                        id="check"
+                        type="radio"
+                        name={"check-"+i}
+                        className="size-4 accent-red-500"
+                        onChange={(e) => handleAlpha(e, item.id)}
+                        checked={item.alpha}
+                      />{" "}
+                      <label className="">A</label>
+                    </FormGroup>
+                  </div>
+                  <div className="btn-group flex gap-4">
+                    <button onClick={()=>{onEditShow();setEditData(item)}}>
+                      <PencilSharp color={"green"} />
+                      {/* Edit */}
+                    </button>
+                    <button
+                    className="hidden"
+                      onClick={() => handleDelete(item.id)}>
+                      <TrashBin color={"#f00"} />
+                      {/* Delete */}
+                    </button>
+                  </div>
+                </div>
+              </div>
             ))
         : "Tidak Ada Data"}
-    </ul>
+    </div>
   );
 };
 
@@ -98,6 +80,10 @@ export default ListAbsen;
 
 ListAbsen.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  newData: PropTypes.func.isRequired,
+  setEditData: PropTypes.func.isRequired,
+  handleAlpha: PropTypes.func.isRequired,
+  handlePermit: PropTypes.func.isRequired,
+  handlePresent: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
   onEditShow: PropTypes.func.isRequired,
 };

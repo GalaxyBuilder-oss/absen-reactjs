@@ -4,14 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "publishConfig": {
-  "GalaxyBuilder-Oss:registry": "https://npm.pkg.github.com"
-},
+    "GalaxyBuilder-Oss:registry": "https://npm.pkg.github.com"
+  },
   "homepage": "https://galaxybuilder-oss.github.io/absen-reactjs/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "fb:build": "vite build && firebase deploy",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
+    "preview": "vite preview --port 8080",
     "deploy": "gh-pages -d build"
   },
   "dependencies": {
@@ -19,6 +20,7 @@
     "@tailwindcss/typography": "^0.5.12",
     "dotenv": "^16.4.5",
     "firebase": "^10.11.1",
+    "firebase-tools": "^13.10.2",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

@@ -1,17 +1,35 @@
 import PropTypes from "prop-types";
 import WindowFixed from "./style/WindowFixed";
-import { addData } from "./db/connect";
-import FormGroup from "./style/FormGroup";
-import { btnClassic, btnMenu } from "./style/style";
+import { addData } from "../utils/db/connect";
+import { btnMenu } from "./style/style";
 
 const FormAdd = ({ handleAddWindow, data, newData }) => {
+  const generations = [
+    {
+      no: 20,
+      name: "integer",
+      count: 10,
+    },
+    {
+      no: 21,
+      name: "getch",
+      count: 30,
+    },
+    {
+      no: 22,
+      name: "include",
+      count: 35,
+    },
+  ];
   const handleOnSubmit = (e) => {
     e.preventDefault();
     const value = e.target.name.value.trim();
     const dormitory = e.target.dormitory.value.trim();
-    const generation = e.target.generation.value.trim();
+    const generation = generations.filter(
+      (data) => data.name === e.target.generation.value.trim()
+    )[0];
 
-    if (!value) return; // Jika input kosong, hentikan fungsi
+    if (!value || value.length < 3) return; // Jika input kosong, hentikan fungsi
     if (!dormitory) return; // Jika input kosong, hentikan fungsi
     if (!generation) return; // Jika input kosong, hentikan fungsi
 
@@ -53,40 +71,68 @@ const FormAdd = ({ handleAddWindow, data, newData }) => {
         Tambahkan
       </h1>
       <div className="mx-4 px-4 h-[70vh] bg-green-600">
-        <div className="bg-gray-50 h-full rounded-xl px-2 py-10">
-          <form action="post" className="flex flex-col gap-4 text-md font-semibold" onSubmit={handleOnSubmit}>
-            <FormGroup>
-              <label htmlFor="nama">Nama :</label>
+        <div className="bg-gray-50 h-full rounded-xl px-2 py-4">
+          <form
+            action="post"
+            className="flex flex-col gap-4 text-md font-semibold"
+            onSubmit={handleOnSubmit}
+          >
+            <div className="flex flex-col p-2 gap-2 my-2">
+              <label htmlFor="nama" className="px-4">
+                NAMA
+              </label>
               <input
                 type="text"
                 name="name"
                 id="nama"
                 placeholder="John Doe"
-                className="border capitalize"
+                className="border capitalize p-3 rounded-full"
+                pattern=".{3,}[A-Za-z ]" title="Fill With Your Full Name"
               />
-            </FormGroup>
-            <FormGroup>
-              <label htmlFor="dormitory">Asrama :</label>
-              <select name="dormitory" id="dormitory" className="text-xs">
-                <option value="">-- Pilih Asrama --</option>
-                <option value="Asrama Ikhwan">Asrama Ikhwan(Aswan)(Ikhwan)</option>
-                <option value="Asrama Putra">Asrama Putra(Astra)(Ikhwan)</option>
-                <option value="Asrama Putri">Asrama Putri(Asri)(Akhwat)</option>
-                <option value="Asrama Baru">Asrama Baru(Asbar)(Akhwat)</option>
+            </div>
+            <div className="flex flex-col p-2 gap-2">
+              <label htmlFor="dormitory" className="px-4">
+                PILIH ASRAMA
+              </label>
+              <select
+                name="dormitory"
+                id="dormitory"
+                className="border capitalize p-3 rounded-full"
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  -- Pilih Asrama --
+                </option>
+                <option value="Asrama Ikhwan">Asrama Ikhwan(Aswan)</option>
+                <option value="Asrama Putra">Asrama Putra(Astra)</option>
+                <option value="Asrama Putri">Asrama Putri(Asri)</option>
+                <option value="Asrama Baru">Asrama Baru(Asbar)</option>
               </select>
-            </FormGroup>
-            <FormGroup>
-              <label htmlFor="generation">Angkatan :</label>
-              <select name="generation" id="generation" className="text-xs">
-                <option value="">-- Pilih Angkatan --</option>
-                <option value="integer">Angkatan 20</option>
-                <option value="getch">Angkatan 21</option>
-                <option value="include">Angkatan 22</option>
+            </div>
+            <div className="flex flex-col p-2 gap-2">
+              <label htmlFor="generation" className="px-4">
+                ANGKATAN
+              </label>
+              <select
+                name="generation"
+                id="generation"
+                className="border capitalize p-3 rounded-full"
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  -- Pilih Angkatan --
+                </option>
+                {generations.map((generation, i) => (
+                  <option key={i} value={generation.name}>Angkatan {generation.no}</option>
+                ))}
               </select>
-            </FormGroup>
-            <div className="mt-1 flex gap-2">
-              <button type="submit" className={btnClassic}>
-                Add
+            </div>
+            <div className="flex flex-col p-2 gap-2">
+              <button
+                type="submit"
+                className="border rounded-full p-3 hover:bg-gray-300 cursor-pointer font-bold hover:font-light"
+              >
+                TAMBAHKAN
               </button>
             </div>
           </form>

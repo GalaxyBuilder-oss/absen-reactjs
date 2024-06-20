@@ -1,154 +1,48 @@
 import { useState } from "react";
-import FormAdd from "./components/FormAdd";
-import { deleteData, getData, setDBData } from "./components/db/connect";
+import { getData, getHistory } from "./utils/db/connect";
 import { useEffect } from "react";
 import FloatingButton from "./components/style/Floatingbutton";
-import AboutView from "./components/AboutView";
 import ListAbsen from "./components/ListAbsen";
 import ListHead from "./components/ListHead";
 import NavigationBar from "./components/NavigationBar";
 import Footer from "./components/Footer";
-import EditView from "./components/EditView";
+import HistoryList from "./components/HistoryList";
+import ListHeadHistory from "./components/ListHeadHistory";
 
-const App = () => {
+export default function App() {
+  const t = new Date();
   const [data, setData] = useState([]);
-  const [data2, setData2] = useState([]);
-  const [editData, setEditData] = useState();
+  const [histories, setHistories] = useState([]);
+  const [date, setDate] = useState(t.getDate());
+  const [month, setMonth] = useState(t.getMonth()+1);
+  const [year, setYear] = useState(t.getFullYear());
   const [filteredData, setFilteredData] = useState([]);
-  const [showAdd, setShowAdd] = useState(false);
-  const [showEdit, setShowEdit] = useState(false);
-  const [showAbout, setShowAbout] = useState(false);
+  const [menu, setMenu] = useState(0);
+  const [showIsAdmin, setShowIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedPrayerTime, setSelectedPrayerTime] = useState("Shubuh");
   const [dormitory, setDormitory] = useState("Asrama Ikhwan");
 
-  const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu", "Ahad"];
-  const prayerTimeList = ["Shubuh", "Dzuhur", "Ashar", "Maghrib", "Isya"];
-  const months = [
-    "Januari",
-    "Ferbuari",
-    "Maret",
-    "April",
-    "Mei",
-    "Juni",
-    "Juli",
-    "Agustus",
-    "September",
-    "Oktober",
-    "November",
-    "Desember",
-  ];
-
   // declaration object
-  const date = new Date();
+  document.title = import.meta.env.VITE_APP_NAME;
 
-  document.title=import.meta.env.VITE_APP_NAME
-
+  // Method Action
   const handlePrayerTime = (time) => {
     setSelectedPrayerTime(time.target.value);
   };
 
-  const handlePresent = (event, id) => {
-    const updatedData = data.map((item) => {
-      if (item.id === id)
-        return { ...item, present: true, permit: false, alpha: false };
-      return item;
-    });
-
-    setDBData(updatedData); // Memperbarui data asli
-    fetchData();
-  };
-  const handleAlpha = (event, id) => {
-    const updatedData = data.map((item) => {
-      if (item.id === id)
-        return { ...item, present: false, permit: false, alpha: true };
-      return item;
-    });
-
-    setDBData(updatedData); // Memperbarui data asli
-    fetchData();
-  };
-  const handlePermit = (event, id) => {
-    const updatedData = data.map((item) => {
-      if (item.id === id)
-        return { ...item, present: false, permit: true, alpha: false };
-      return item;
-    });
-
-    setDBData(updatedData); // Memperbarui data asli
-    fetchData();
-  };
-
-  const handleDelete = (id) => {
-    deleteData(id)
-      .then(() => {
-        console.log("Data di tengah array berhasil dihapus.");
-        fetchData();
-      })
-      .catch((error) => {
-        console.error("Gagal menghapus data di tengah array:", error);
-      });
-  };
-
-  const handlePrint = () => {
-    const alphaList = data
-      .filter(
-        (item) => item.alpha && item.id !== 0 && item.dormitory === dormitory
-      )
-      .map((item) => `- ${item.name.split(" ")[0]}`)
-      .join("\n");
-    const permitList = data
-      .filter(
-        (item) => item.permit && item.id !== 0 && item.dormitory === dormitory
-      )
-      .map((item) => `- ${item.name.split(" ")[0]}`)
-      .join("\n");
-    const formattedDate = `${days[
-      date.getUTCDay()
-    ].toUpperCase()}, ${date.getDate()} ${months[
-      date.getMonth()
-    ].toUpperCase()} ${date.getUTCFullYear()}`;
-    let text = `*SHALAT ${selectedPrayerTime.toUpperCase()} HARI ${formattedDate}*\n\nTidak Hadir:\n${alphaList}\n\nIzin:\n${permitList}\n\n*Catatan:*\n- *Konfirmasi Kehadiran Atau Izin Lewat Wa Div Kerohanian Yang Mencatat*\n- *Jika Poin Izin Habis Maka Tidak Bisa Izin Lagi, poin izin akan di reset setelah pembinaan*`;
-    navigator.clipboard.writeText(text);
-    alert("Copied Success!");
-  };
-
-  const handleShowEdit = () => {
-    setShowEdit(!showEdit);
-  };
-
-  const handleAddWindow = () => {
-    setShowAdd(!showAdd);
-  };
-
-  const handleAboutWindow = () => {
-    setShowAbout(!showAbout);
-  };
-
-  const fetchData = () =>
+  const fetchData = () => {
+    setIsLoading(true);
     getData()
       .then((response) => {
-        if (response.hasChildren()) setData(response.val());
+        if (response.hasChildren()) {
+          setData(response.val());
+          setIsLoading(false);
+        }
       })
       .catch((e) => {
         console.error(e);
       });
-
-  const saveData = (editedData) => {
-    const temp = data.map((item) => {
-      if (item.id === editData.id)
-        return {
-          id: editData.id,
-          name: editedData.name,
-          generation: editedData.generation,
-          dormitory: editedData.dormitory,
-          present: editedData.present,
-          permit: editedData.permit,
-          alpha: editedData.alpha,
-        };
-      return item;
-    });
-    temp ? setDBData(temp): console.error("Data Kosong");
-    fetchData();
   };
 
   useEffect(() => {
@@ -156,56 +50,81 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    let dataFiltered = data.filter((item) => item.dormitory === dormitory);
+    let dataFiltered = data.filter((item) => {
+      if (item.dormitory === dormitory) return item;
+    });
     setFilteredData(dataFiltered);
   }, [data, dormitory]);
+
+  const fecthDataHistory = async () => {
+    setIsLoading(true);
+    await getHistory(encodeURIComponent(dormitory), selectedPrayerTime, year, month, date)
+      .then((data) => {
+        setHistories(data.val());
+        setIsLoading(false);
+      })
+      .catch((e) => console.error(e));
+  };
 
   return (
     <>
       <NavigationBar
-        onShowAbout={handleAboutWindow}
-        onShowAdd={handleAddWindow}
-        setDormitory={setDormitory}
+        fetchData={fetchData}
+        data={data}
+        setData={setData}
+        setShowIsAdmin={setShowIsAdmin}
+        isAdmin={showIsAdmin}
+        setMenu={setMenu}
+        menu={menu}
       />
       <main className="h-[76vh] mx-2 bg-green-600 px-4 border-green-600">
-        <div className="rounded-lg bg-white relative">
-          <ListHead
-            newData={fetchData}
-            showTime={prayerTimeList}
-            onShowTimeClick={handlePrayerTime}
-          />
-          <ListAbsen
-            data={filteredData}
-            onEditShow={handleShowEdit}
-            setEditData={setEditData}
-            handleAlpha={handleAlpha}
-            handlePermit={handlePermit}
-            handlePresent={handlePresent}
-            handleDelete={handleDelete}
-          />
-          <FloatingButton handleClick={handlePrint} />
-        </div>
-        {showAdd && (
-          <FormAdd
-            handleAddWindow={handleAddWindow}
-            setData={setData}
+        <div className="lg:h-[76vh] rounded-lg bg-white relative py-2">
+          {menu === 0 ? (
+            <>
+              <ListHead
+                onShowTimeClick={handlePrayerTime}
+                setDormitory={setDormitory}
+                dormitory={dormitory}
+              />
+              <ListAbsen
+                realData={data}
+                filteredData={filteredData}
+                refreshData={fetchData}
+                isAdmin={showIsAdmin}
+                isLoading={isLoading}
+              />
+            </>
+          ) : menu === 1 ? (
+            <>
+              <ListHeadHistory
+                onShowTimeClick={handlePrayerTime}
+                setDormitory={setDormitory}
+                fetchDataHistory={fecthDataHistory}
+                setDate={setDate}
+                setMonth={setMonth}
+                setYear={setYear}
+              />
+              <HistoryList
+                fetchDataHistory={fecthDataHistory}
+                dormitory={dormitory}
+                histories={histories}
+                isLoading={isLoading}
+              />
+            </>
+          ) : (
+            <>
+              Menu Tidak Tersedia
+            </>
+          )}
+          <FloatingButton
             data={data}
-            newData={fetchData}
+            selectedPrayerTime={selectedPrayerTime}
+            dormitory={dormitory}
+            isAdmin={showIsAdmin}
           />
-        )}
-        {showAbout && <AboutView handleClick={handleAboutWindow} />}
-        {showEdit && (
-          <EditView
-            handleClick={handleShowEdit}
-            data={editData}
-            saveData={saveData}
-            refreshData={fetchData}
-          />
-        )}
+        </div>
       </main>
-      <Footer date={date} />
+      <Footer />
     </>
   );
-};
-
-export default App;
+}

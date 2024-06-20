@@ -1,10 +1,9 @@
 /* eslint-disable react/prop-types */
-import WindowFixed from "./style/WindowFixed";
 import { btnMenu } from "./style/style";
 
 const AboutView = ({ handleClick }) => {
   return (
-    <WindowFixed>
+    <div className="w-full h-full block fixed z-10 top-0 left-0 bg-gray-900 bg-opacity-40 backdrop-blur-sm transition-all">
       <div className="absolute right-0 m-6">
         <button className={btnMenu} onClick={handleClick}>
           Close
@@ -91,7 +90,7 @@ const AboutView = ({ handleClick }) => {
         </div>
       </div>
       <div className="mx-4 p-4 bg-green-600 rounded-b-xl"></div>
-    </WindowFixed>
+    </div>
   );
 };
 

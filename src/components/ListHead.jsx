@@ -13,13 +13,14 @@ const ListHead = ({ onShowTimeClick, setDormitory, dormitory }) => {
         name="dormitory"
         className="border rounded-md p-0 sm:px-4 text-sm sm:text-md lg:text-xl"
         onChange={handleDormitory}
-        defaultValue={dormitory}
+        defaultValue={dormitory || ''}
       >
         <option value="Asrama Ikhwan">Asrama Ikhwan</option>
         <option value="Asrama Putra">Asrama Putra</option>
         <option value="Asrama Putri">Asrama Putri</option>
         <option value="Asrama Baru">Asrama Baru</option>
       </select>
+      <a href="/copy" className="border rounded-md p-0 sm:px-4">Clipboard</a>
       <select
         name="prayTimes"
         className="border rounded-md p-0 sm:px-4"
@@ -31,23 +32,14 @@ const ListHead = ({ onShowTimeClick, setDormitory, dormitory }) => {
           </option>
         ))}
       </select>
-      {/* <button
-        className="border rounded-md px-2 sm:px-4 hover:bg-gray-300"
-        onClick={() => newData()}
-      >
-        Refresh
-      </button> */}
-      {/* <button className="border rounded-md px-2 sm:px-4 hover:bg-gray-300">
-          Mark All
-        </button> */}
     </div>
   );
 };
 
 ListHead.propTypes = {
-  setDormitory: PropsTypes.func.isRequired,
-  onShowTimeClick: PropsTypes.func.isRequired,
-  dormitory: PropsTypes.string.isRequired,
+  onShowTimeClick: PropsTypes.func,
+  setDormitory: PropsTypes.func,
+  dormitory: PropsTypes.string,
 };
 
 export default ListHead;

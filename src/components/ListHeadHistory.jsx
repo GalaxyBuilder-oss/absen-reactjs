@@ -1,10 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import PropsTypes from "prop-types";
 import momen from "moment";
 import { useEffect } from "react";
 
 const ListHeadHistory = ({
-  onShowTimeClick,
+  dormitory,
   setDormitory,
+  onShowTimeClick,
   fetchDataHistory,
   setDate,
   setMonth,
@@ -17,7 +19,7 @@ const ListHeadHistory = ({
   };
 
   function handleTime(e) {
-    setDate(momen(e.target.value).format("DD"));
+    setDate(momen(e.target.value).format("D"));
     setMonth(momen(e.target.value).format("M"));
     setYear(momen(e.target.value).format("YYYY"));
   }
@@ -32,6 +34,7 @@ const ListHeadHistory = ({
         name="dormitory"
         className="border rounded-md p-0 sm:px-4 text-sm sm:text-md lg:text-xl"
         onChange={handleDormitory}
+        defaultValue={dormitory}
       >
         <option value="Asrama Ikhwan">Asrama Ikhwan</option>
         <option value="Asrama Putra">Asrama Putra</option>
@@ -65,12 +68,13 @@ const ListHeadHistory = ({
 };
 
 ListHeadHistory.propTypes = {
-  setDormitory: PropsTypes.func.isRequired,
-  onShowTimeClick: PropsTypes.func.isRequired,
-  fetchDataHistory: PropsTypes.func.isRequired,
-  setDate: PropsTypes.func.isRequired,
-  setMonth: PropsTypes.func.isRequired,
-  setYear: PropsTypes.func.isRequired,
+  dormitory: PropsTypes.string,
+  setDormitory: PropsTypes.func,
+  onShowTimeClick: PropsTypes.func,
+  fetchDataHistory: PropsTypes.func,
+  setDate: PropsTypes.func,
+  setMonth: PropsTypes.func,
+  setYear: PropsTypes.func,
 };
 
 export default ListHeadHistory;

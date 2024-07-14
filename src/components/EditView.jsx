@@ -25,10 +25,10 @@ const EditView = ({ handleClick, data, saveData }) => {
     const value = e.target.name.value.trim();
     const dormitory = e.target.dormitory.value.trim();
     const generation = generations.filter(
-      (data) => data.name === e.target.generation.value.trim()
+      (gen) => gen.name === e.target.generation.value.trim()
     )[0];
 
-    if (!value || value.length < 3) return; // Jika input kosong, hentikan fungsi
+    if (!value) return; // Jika input kosong, hentikan fungsi
     if (!dormitory) return; // Jika input kosong, hentikan fungsi
     if (!generation) return; // Jika input kosong, hentikan fungsi
 
@@ -44,11 +44,13 @@ const EditView = ({ handleClick, data, saveData }) => {
       .join(" ");
 
     const dataNew = {
+      id: data.id,
       name: capitalizedValue,
       dormitory: dormitory,
       generation: generation,
       alpha: false,
       permit: false,
+      late: false,
       present: false,
     };
 
@@ -56,7 +58,6 @@ const EditView = ({ handleClick, data, saveData }) => {
     e.target.name.value = "";
     e.target.dormitory.selectedIndex = "0";
     e.target.generation.selectedIndex = "0";
-    handleClick();
   };
   return (
     <WindowFixed>
@@ -124,7 +125,7 @@ const EditView = ({ handleClick, data, saveData }) => {
 
 EditView.propTypes = {
   handleClick: Proptype.func,
-  data: Proptype.object.isRequired,
+  data: Proptype.object,
   saveData: Proptype.func,
 };
 

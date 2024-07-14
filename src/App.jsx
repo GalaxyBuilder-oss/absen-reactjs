@@ -1,32 +1,58 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState } from "react";
 import { getData, getHistory } from "./utils/db/connect";
 import { useEffect } from "react";
-import FloatingButton from "./components/style/Floatingbutton";
-import ListAbsen from "./components/ListAbsen";
-import ListHead from "./components/ListHead";
 import NavigationBar from "./components/NavigationBar";
 import Footer from "./components/Footer";
-import HistoryList from "./components/HistoryList";
-import ListHeadHistory from "./components/ListHeadHistory";
+import { Outlet } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/ReactToastify.min.css";
 
 export default function App() {
   const t = new Date();
   const [data, setData] = useState([]);
   const [histories, setHistories] = useState([]);
   const [date, setDate] = useState(t.getDate());
-  const [month, setMonth] = useState(t.getMonth()+1);
+  const [month, setMonth] = useState(t.getMonth() + 1);
   const [year, setYear] = useState(t.getFullYear());
   const [filteredData, setFilteredData] = useState([]);
   const [menu, setMenu] = useState(0);
-  const [showIsAdmin, setShowIsAdmin] = useState(false);
+  const showIsAdmin = JSON.parse(localStorage.getItem("loggedIn"));
   const [isLoading, setIsLoading] = useState(false);
   const [selectedPrayerTime, setSelectedPrayerTime] = useState("Shubuh");
   const [dormitory, setDormitory] = useState("Asrama Ikhwan");
 
+  const dormitories = [
+    "Asrama Ikhwan",
+    "Asrama Putra",
+    "Asrama Putri",
+    "Asrama Baru",
+  ];
+
   // declaration object
   document.title = import.meta.env.VITE_APP_NAME;
 
-  // Method Action
+
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOnline(true);
+    };
+
+    const handleOffline = () => {
+      setIsOnline(false);
+    };
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
   const handlePrayerTime = (time) => {
     setSelectedPrayerTime(time.target.value);
   };
@@ -45,9 +71,25 @@ export default function App() {
       });
   };
 
+  const fecthDataHistory = async () => {
+    setIsLoading(true);
+    await getHistory(
+      encodeURIComponent(dormitory),
+      selectedPrayerTime,
+      year,
+      month,
+      date
+    )
+      .then((data) => {
+        setHistories(data.val());
+        setIsLoading(false);
+      })
+      .catch((e) => console.error(e));
+  };
+
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [isOnline]);
 
   useEffect(() => {
     let dataFiltered = data.filter((item) => {
@@ -56,75 +98,44 @@ export default function App() {
     setFilteredData(dataFiltered);
   }, [data, dormitory]);
 
-  const fecthDataHistory = async () => {
-    setIsLoading(true);
-    await getHistory(encodeURIComponent(dormitory), selectedPrayerTime, year, month, date)
-      .then((data) => {
-        setHistories(data.val());
-        setIsLoading(false);
-      })
-      .catch((e) => console.error(e));
-  };
+  useEffect(() => {
+    fecthDataHistory()
+  }, [dormitory, date, selectedPrayerTime])
 
   return (
     <>
+      {/* <h1>{isOnline ? "Online" : "Offline"}</h1> */}
       <NavigationBar
         fetchData={fetchData}
         data={data}
         setData={setData}
-        setShowIsAdmin={setShowIsAdmin}
         isAdmin={showIsAdmin}
         setMenu={setMenu}
         menu={menu}
       />
-      <main className="h-[76vh] mx-2 bg-green-600 px-4 border-green-600">
-        <div className="lg:h-[76vh] rounded-lg bg-white relative py-2">
-          {menu === 0 ? (
-            <>
-              <ListHead
-                onShowTimeClick={handlePrayerTime}
-                setDormitory={setDormitory}
-                dormitory={dormitory}
-              />
-              <ListAbsen
-                realData={data}
-                filteredData={filteredData}
-                refreshData={fetchData}
-                isAdmin={showIsAdmin}
-                isLoading={isLoading}
-              />
-            </>
-          ) : menu === 1 ? (
-            <>
-              <ListHeadHistory
-                onShowTimeClick={handlePrayerTime}
-                setDormitory={setDormitory}
-                fetchDataHistory={fecthDataHistory}
-                setDate={setDate}
-                setMonth={setMonth}
-                setYear={setYear}
-              />
-              <HistoryList
-                fetchDataHistory={fecthDataHistory}
-                dormitory={dormitory}
-                histories={histories}
-                isLoading={isLoading}
-              />
-            </>
-          ) : (
-            <>
-              Menu Tidak Tersedia
-            </>
-          )}
-          <FloatingButton
-            data={data}
-            selectedPrayerTime={selectedPrayerTime}
-            dormitory={dormitory}
-            isAdmin={showIsAdmin}
-          />
-        </div>
-      </main>
+      <Outlet
+        context={[
+          handlePrayerTime,
+          setDormitory,
+          dormitory,
+          data,
+          filteredData,
+          fetchData,
+          fecthDataHistory,
+          showIsAdmin,
+          isLoading,
+          menu,
+          setDate,
+          setMonth,
+          setYear,
+          histories,
+          selectedPrayerTime,
+          dormitories,
+          t,
+        ]}
+      />
       <Footer />
+      <ToastContainer />
     </>
   );
 }

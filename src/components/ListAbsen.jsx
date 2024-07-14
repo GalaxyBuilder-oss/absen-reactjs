@@ -1,9 +1,11 @@
 import PropTypes from "prop-types";
 import FormGroup from "./style/FormGroup";
-import { InformationCircle, PencilSharp, TrashBin } from "react-ionicons";
+import { PenBoxIcon, Trash2, InfoIcon } from "lucide-react"
 import { deleteData, setDBData } from "../utils/db/connect";
 import { useState } from "react";
 import EditView from "./EditView";
+import { toast } from "react-toastify";
+import { defaultSettings } from "../utils/toastConfig";
 
 const ListAbsen = ({
   filteredData,
@@ -12,36 +14,34 @@ const ListAbsen = ({
   isLoading,
   refreshData,
 }) => {
-  // Declare
   const [enableDelete, setEnableDelete] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
-  const [editData, setEditData] = useState();
+  const [editData, setEditData] = useState({
+    id: '',
+    name: '',
+    generation: {},
+    dormitory: '',
+    present: false,
+    permit: false,
+    late: false,
+    alpha: false,
+  });
 
-  // Method
   const handleShowEdit = () => {
     setShowEdit(!showEdit);
   };
+
   const saveData = (editedData) => {
-    const temp = realData.map((item) => {
-      if (item.id === editData.id)
-        return {
-          id: editData.id,
-          name: editedData.name,
-          generation: editedData.generation,
-          dormitory: editedData.dormitory,
-          present: editedData.present,
-          permit: editedData.permit,
-          alpha: editedData.alpha,
-        };
-      return item;
-    });
-    temp ? setDBData(temp) : console.error("Data Kosong");
+    const temp = realData.map((item) => item.id === editedData.id ? editedData : item);
+    setDBData(temp)
     refreshData();
-    handleShowEdit()
+    handleShowEdit();
   };
-  const handleDelete = (id) => {
+
+  const handleDelete = async (id) => {
+    if (!confirm("Anda Yakin Menghapus ini?")) return;
     setEnableDelete(true);
-    deleteData(id)
+    await deleteData(id)
       .then(() => {
         console.log("Data di tengah array berhasil dihapus.");
         refreshData();
@@ -51,24 +51,36 @@ const ListAbsen = ({
         console.error("Gagal menghapus data di tengah array:", error);
       });
   };
+
   const handlePresent = (event, id) => {
-    setStatus(id, true, false, false);
+    event.target.disabled = true
+    setStatus(id, true, false, false, false);
+    event.target.disabled = false
   };
   const handlePermit = (event, id) => {
-    setStatus(id, false, true, false);
+    event.target.disabled = true
+    setStatus(id, false, true, false, false);
+    event.target.disabled = false
+  };
+  const handleLate = (event, id) => {
+    event.target.disabled = true
+    setStatus(id, false, false, true, false);
+    event.target.disabled = false
   };
   const handleAlpha = (event, id) => {
-    setStatus(id, false, false, true);
+    event.target.disabled = true
+    setStatus(id, false, false, false, true);
+    event.target.disabled = false
   };
 
-  // helper method
-  const setStatus = (id, presentValue, permitValue, alphaValue) => {
+  const setStatus = async (id, presentValue, permitValue, lateValue, alphaValue) => {
     const updatedData = realData.map((item) => {
       if (item.id === id)
         return {
           ...item,
           present: presentValue,
           permit: permitValue,
+          late: lateValue,
           alpha: alphaValue,
         };
       return item;
@@ -76,6 +88,7 @@ const ListAbsen = ({
     setDBData(updatedData); // Memperbarui data asli
     refreshData();
   };
+
   return (
     <>
       <div className="w-full h-[70vh] lg:h-[63vh] flex flex-col gap-2 overflow-y-scroll p-2 lg:text-xl scrollbar-hide">
@@ -89,115 +102,145 @@ const ListAbsen = ({
             .map((item, i) => (
               <div
                 key={i}
-                className="w-full border p-2 flex flex-col gap-2 hover:bg-gray-200 cursor-pointer rounded-md"
+                className="w-full border p-2 flex items-center gap-2 hover:bg-gray-200 cursor-pointer rounded-md"
               >
-                <FormGroup>
-                  <span className="">{i + 1 + ". " + item.name}</span>
-                </FormGroup>
-                {isAdmin ? (
-                  <div className="flex justify-between items-center">
-                    <div className="checkbox flex justify-between gap-4">
-                      <FormGroup>
-                        <input
-                          required
-                          id="check"
-                          type="radio"
-                          name={"check-" + i}
-                          className="size-4 accent-green-600"
-                          onChange={(e) => handlePresent(e, item.id)}
-                          checked={item.present}
-                        />{" "}
-                        <label className="">H</label>
-                      </FormGroup>
-                      <FormGroup>
-                        <input
-                          required
-                          id="check"
-                          type="radio"
-                          name={"check-" + i}
-                          className="size-4 accent-yellow-300"
-                          onChange={(e) => handlePermit(e, item.id)}
-                          checked={item.permit}
-                        />{" "}
-                        <label className="">I</label>
-                      </FormGroup>
-                      <FormGroup>
-                        <input
-                          required
-                          id="check"
-                          type="radio"
-                          name={"check-" + i}
-                          className="size-4 accent-red-500"
-                          onChange={(e) => handleAlpha(e, item.id)}
-                          checked={item.alpha}
-                        />{" "}
-                        <label className="">A</label>
-                      </FormGroup>
-                    </div>
-                    <div className="btn-group flex gap-4">
+                <div className="w-14 h-14 bg-green-600 flex items-center justify-center text-white rounded-full font-bold">
+                  {item.name.includes(" ")
+                    ? item.name.charAt(0) + item.name.split(" ")[1].charAt(0)
+                    : item.name.charAt(0)}
+                </div>
+                <div className="w-[90vw] p-2 flex justify-between gap-2 ">
+                  <div className="flex justify-between flex-col">
+                    <FormGroup>
+                      <span className="">{item.name}</span>
+                    </FormGroup>
+                    {isAdmin ? (
+                      <>
+                        <div className="checkbox flex justify-between gap-4">
+                          <FormGroup>
+                            <input
+                              required
+                              type="radio"
+                              name={"check-" + i}
+                              className="size-4 accent-green-600"
+                              onChange={(e) => handlePresent(e, item.id)}
+                              checked={item.present}
+                            />{" "}
+                            <span className="">H</span>
+                          </FormGroup>
+                          <FormGroup>
+                            <input
+                              required
+                              type="radio"
+                              name={"check-" + i}
+                              className="size-4 accent-yellow-300"
+                              onChange={(e) => handlePermit(e, item.id)}
+                              checked={item.permit}
+                            />{" "}
+                            <span className="">I</span>
+                          </FormGroup>
+                          <FormGroup>
+                            <input
+                              required
+                              type="radio"
+                              name={"check-" + i}
+                              className="size-4 accent-amber-300"
+                              onChange={(e) => handleLate(e, item.id)}
+                              checked={item.late}
+                            />{" "}
+                            <span className="">M{ }</span>
+                          </FormGroup>
+                          <FormGroup>
+                            <input
+                              required
+                              type="radio"
+                              name={"check-" + i}
+                              className="size-4 accent-red-500"
+                              onChange={(e) => handleAlpha(e, item.id)}
+                              checked={item.alpha}
+                            />{" "}
+                            <span className="">A</span>
+                          </FormGroup>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="checkbox flex justify-between gap-4">
+                        <FormGroup>
+                          <span
+                            className={
+                              "size-4 rounded-full border " +
+                              (item.present && "bg-green-600")
+                            }
+                          >
+                            {" "}
+                          </span>
+                          <span className="">H</span>
+                        </FormGroup>
+                        <FormGroup>
+                          <span
+                            className={
+                              "size-4 rounded-full border " +
+                              (item.permit && "bg-yellow-300")
+                            }
+                          >
+                            {" "}
+                          </span>
+                          <span className="">I</span>
+                        </FormGroup>
+                        <FormGroup>
+                          <span
+                            className={
+                              "size-4 rounded-full border " +
+                              (item.late && "bg-amber-300")
+                            }
+                          >
+                            {" "}
+                          </span>
+                          <span className="">M</span>
+                        </FormGroup>
+                        <FormGroup>
+                          <span
+                            className={
+                              "size-4 rounded-full border " +
+                              (item.alpha && "bg-red-500")
+                            }
+                          >
+                            {" "}
+                          </span>
+                          <span className="">A</span>
+                        </FormGroup>
+                      </div>
+                    )}
+                  </div>
+                  {isAdmin ? (<div className="btn-group flex flex-col gap-4">
+                    <button
+                      onClick={() => {
+                        setEditData(item);
+                        handleShowEdit();
+                      }}
+                    >
+                      <PenBoxIcon />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      disabled={enableDelete}
+                    >
+                      <Trash2 />
+                    </button>
+                  </div>) :
+                    (<div className="btn-group flex gap-4">
                       <button
                         onClick={() => {
-                          setEditData(item);
-                          handleShowEdit();
+                          toast.info(
+                            `Nama : ${item.name}\nAsrama : ${item.dormitory}`,
+                            defaultSettings
+                          );
                         }}
                       >
-                        <PencilSharp color={"green"} />
-                        {/* Edit */}
+                        <InfoIcon />
                       </button>
-                      <button
-                        onClick={() => handleDelete(item.id)}
-                        disabled={enableDelete}
-                      >
-                        <TrashBin color={"#f00"} />
-                        {/* Delete */}
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex justify-between items-center">
-                    <div className="checkbox flex justify-between gap-4">
-                      <FormGroup>
-                        <span
-                          className={
-                            "size-4 rounded-full border " +
-                            (item.present && "bg-green-600")
-                          }
-                        >
-                          {" "}
-                        </span>
-                        <label className="">H</label>
-                      </FormGroup>
-                      <FormGroup>
-                        <span
-                          className={
-                            "size-4 rounded-full border " +
-                            (item.permit && "bg-yellow-300")
-                          }
-                        >
-                          {" "}
-                        </span>
-                        <label className="">I</label>
-                      </FormGroup>
-                      <FormGroup>
-                        <span
-                          className={
-                            "size-4 rounded-full border " +
-                            (item.alpha && "bg-red-500")
-                          }
-                        >
-                          {" "}
-                        </span>
-                        <label className="">A</label>
-                      </FormGroup>
-                    </div>
-                    <div className="btn-group flex gap-4">
-                      <button onClick={() => alert("Belum Berfungsi")}>
-                        <InformationCircle color={"green"} />
-                        {/* Information */}
-                      </button>
-                    </div>
-                  </div>
-                )}
+                    </div>)}
+                </div>
               </div>
             ))
         ) : (
@@ -211,7 +254,6 @@ const ListAbsen = ({
           handleClick={handleShowEdit}
           data={editData}
           saveData={saveData}
-          fetchData={refreshData}
         />
       )}
     </>
@@ -221,9 +263,9 @@ const ListAbsen = ({
 export default ListAbsen;
 
 ListAbsen.propTypes = {
-  realData: PropTypes.arrayOf(PropTypes.object).isRequired,
-  filteredData: PropTypes.arrayOf(PropTypes.object).isRequired,
-  refreshData: PropTypes.func.isRequired,
+  realData: PropTypes.arrayOf(PropTypes.object),
+  filteredData: PropTypes.arrayOf(PropTypes.object),
+  refreshData: PropTypes.func,
   isAdmin: PropTypes.bool,
   isLoading: PropTypes.bool,
 };

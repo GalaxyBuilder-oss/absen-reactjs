@@ -1,17 +1,16 @@
 /* eslint-disable react/prop-types */
 import FormGroup from "./style/FormGroup";
-import { InformationCircle } from "react-ionicons";
+import { InfoIcon } from "lucide-react";
 
 const HistoryList = ({ histories, isLoading }) => {
 
-  // helper method
   return (
     <div className="w-full h-[70vh] lg:h-[63vh] flex flex-col gap-2 overflow-y-scroll p-2 lg:text-xl">
       {isLoading ? (
         <div className="text-center text-xl lg:text-2xl font-mono">
           Data Is Loading...
         </div>
-      ) : histories != null && histories.length > 0 ? (
+      ) : histories && histories.length > 0 ? (
         histories
           .sort((a, b) => a.name.localeCompare(b.name))
           .map((item, i) => (
@@ -50,6 +49,17 @@ const HistoryList = ({ histories, isLoading }) => {
                     <span
                       className={
                         "size-4 rounded-full border " +
+                        (item.late && "bg-amber-500")
+                      }
+                    >
+                      {" "}
+                    </span>
+                    <label className="">M</label>
+                  </FormGroup>
+                  <FormGroup>
+                    <span
+                      className={
+                        "size-4 rounded-full border " +
                         (item.alpha && "bg-red-500")
                       }
                     >
@@ -60,7 +70,7 @@ const HistoryList = ({ histories, isLoading }) => {
                 </div>
                 <div className="btn-group flex gap-4">
                   <button onClick={() => alert("Belum Berfungsi")}>
-                    <InformationCircle color={"green"} />
+                    <InfoIcon color={"green"} />
                     {/* Information */}
                   </button>
                 </div>

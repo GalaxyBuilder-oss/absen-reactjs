@@ -1,24 +1,16 @@
-/* eslint-disable react/prop-types */
-import { btnMenu } from "./style/style";
-
-const AboutView = ({ handleClick }) => {
+const AboutPage = () => {
   return (
-    <div className="w-full h-full block fixed z-10 top-0 left-0 bg-gray-900 bg-opacity-40 backdrop-blur-sm transition-all">
-      <div className="absolute right-0 m-6">
-        <button className={btnMenu} onClick={handleClick}>
-          Close
-        </button>
-      </div>
-      <h1 className="mt-4 mx-4 bg-green-600 text-gray-50 p-4 rounded-t-xl font-bold uppercase">
-        About
-      </h1>
-      <div className="mx-4 px-4 h-[70vh] bg-green-600">
-        <div className="bg-gray-50 h-full px-4 py-8 rounded-xl overflow-y-scroll">
-          <h1 className="font-bold text-2xl uppercase text-center">Absensi Sholat Program Beasiswa PUB</h1>
+    <main className="h-[76vh] mx-2 bg-green-600 px-4 border-green-600">
+      <div className="lg:h-[76vh] rounded-lg bg-white relative py-2">
+        <div className="h-[76vh] bg-gray-50 px-4 py-8 rounded-xl overflow-y-scroll">
+          <h1 className="font-bold text-2xl uppercase text-center">
+            Absensi Sholat Program Beasiswa PUB
+          </h1>
 
           <p className="indent-4 text-justify py-2">
-            Aplikasi mobile berbasis Web ini berfungsi sebagai sistem manajemen kehadiran
-            sholat yang komprehensif untuk lingkungan Program Beasiswa PUB.
+            Aplikasi berbasis Web ini berfungsi sebagai sistem manajemen
+            kehadiran sholat yang komprehensif untuk lingkungan Program Beasiswa
+            PUB.
           </p>
           <hr className="my-4" />
           <h2 className="font-semibold text-xl">Fitur</h2>
@@ -34,9 +26,9 @@ const AboutView = ({ handleClick }) => {
               kehadiran sebagai hadir, alfa, atau dengan seizin (ijin).
             </li>
             <li>
-              Integrasi Data: Terhubung dengan basis data yang aman (Menggunakan Google
-              Firebase) untuk memastikan penyimpanan data dan pengambilan data
-              yang efisien.
+              Integrasi Data: Terhubung dengan basis data yang aman (Menggunakan
+              Google Firebase) untuk memastikan penyimpanan data dan pengambilan
+              data yang efisien.
             </li>
             <li>
               Antarmuka Ramah Pengguna: Menyediakan bilah navigasi terstruktur
@@ -51,9 +43,9 @@ const AboutView = ({ handleClick }) => {
               disalin ke clipboard untuk disebarkan lebih lanjut.
             </li>
             <li>
-              Pemfilteran Dinamis: Memfilter daftar mahasiswa berdasarkan
-              Asrama yang dipilih saat ini, memungkinkan
-              pengelolaan kehadiran yang terfokus.
+              Pemfilteran Dinamis: Memfilter daftar mahasiswa berdasarkan Asrama
+              yang dipilih saat ini, memungkinkan pengelolaan kehadiran yang
+              terfokus.
             </li>
             <li>
               Pemilihan Waktu Sholat: Memungkinkan pengguna untuk beralih di
@@ -89,9 +81,8 @@ const AboutView = ({ handleClick }) => {
           </ul>
         </div>
       </div>
-      <div className="mx-4 p-4 bg-green-600 rounded-b-xl"></div>
-    </div>
+    </main>
   );
 };
 
-export default AboutView;
+export default AboutPage;

@@ -103,7 +103,7 @@ const ListAbsen = ({
             .map((item, i) => (
               <div
                 key={i}
-                className="w-full border p-2 flex items-center gap-2 hover:bg-gray-200 cursor-pointer rounded-md"
+                className="w-full border p-1 flex items-center hover:bg-gray-200 cursor-pointer rounded-md"
               >
                 <div>
                   <SVGInitials words={item.name.includes(" ")

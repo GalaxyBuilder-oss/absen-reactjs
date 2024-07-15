@@ -6,6 +6,7 @@ import { useState } from "react";
 import EditView from "./EditView";
 import { toast } from "react-toastify";
 import { defaultSettings } from "../utils/toastConfig";
+import SVGInitials from "./SVGInitials";
 
 const ListAbsen = ({
   filteredData,
@@ -91,7 +92,7 @@ const ListAbsen = ({
 
   return (
     <>
-      <div className="w-full h-[70vh] lg:h-[63vh] flex flex-col gap-2 overflow-y-scroll p-2 lg:text-xl scrollbar-hide">
+      <div className="w-full h-[67vh] sm:h-[63vh] flex flex-col gap-2 overflow-y-scroll p-2 lg:text-xl scrollbar-hide">
         {isLoading ? (
           <div className="text-center text-xl lg:text-2xl font-mono">
             Data Is Loading...
@@ -104,10 +105,10 @@ const ListAbsen = ({
                 key={i}
                 className="w-full border p-2 flex items-center gap-2 hover:bg-gray-200 cursor-pointer rounded-md"
               >
-                <div className="w-14 h-14 bg-green-600 flex items-center justify-center text-white rounded-full font-bold">
-                  {item.name.includes(" ")
+                <div>
+                  <SVGInitials words={item.name.includes(" ")
                     ? item.name.charAt(0) + item.name.split(" ")[1].charAt(0)
-                    : item.name.charAt(0)}
+                    : item.name.charAt(0)} backgroundColor={"fill-green-600"} textColor={"fill-white"} />
                 </div>
                 <div className="w-[90vw] p-2 flex justify-between gap-2 ">
                   <div className="flex justify-between flex-col">
@@ -212,6 +213,9 @@ const ListAbsen = ({
                       </div>
                     )}
                   </div>
+                  <FormGroup>
+                    <span className="hidden sm:block">{item.present && "Hadir"}{item.permit && "Izin"}{item.late && "Masbuk"}{item.alpha && "Tidak Hadir"}</span>
+                  </FormGroup>
                   {isAdmin ? (<div className="btn-group flex flex-col gap-4">
                     <button
                       onClick={() => {
@@ -232,7 +236,7 @@ const ListAbsen = ({
                       <button
                         onClick={() => {
                           toast.info(
-                            `Nama : ${item.name}\nAsrama : ${item.dormitory}`,
+                            `Nama : ${item.name}\nAngkatan : ${item.generation.no} ${item.generation.name}`,
                             defaultSettings
                           );
                         }}

@@ -6,7 +6,7 @@ import { useState } from "react";
 import { defaultSettings } from "../utils/toastConfig";
 
 const AddPage = () => {
-  const [, , , data, , , , , , , , , , , ,] = useOutletContext();
+  const [, , , data, , fetchData, , , , , , , , , ,] = useOutletContext();
 
   const [tab, setTab] = useState(0);
   const [generations, setGenerations] = useState([
@@ -62,7 +62,7 @@ const AddPage = () => {
     toast.success("Successfully Add Generations", defaultSettings);
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
     const value = e.target.name.value.trim();
     const dormitory = e.target.dormitory.value.trim();
@@ -94,11 +94,14 @@ const AddPage = () => {
       present: false,
     };
 
-    addData(dataNew, data != null ? Number.parseInt(data.length) : 0);
+    await addData(dataNew, data != null ? Number.parseInt(data.length) : 0).then(() => {
+
+      toast.success("Successfully Add New Member", defaultSettings);
+      fetchData()
+    }).catch((e) => toast.error(e.message, defaultSettings));
     e.target.name.value = "";
     e.target.dormitory.selectedIndex = "0";
     e.target.generation.selectedIndex = "0";
-    toast.success("Successfully Add New Member", defaultSettings);
   };
 
   const daftar = () => {
@@ -144,7 +147,6 @@ const AddPage = () => {
                   id="nama"
                   placeholder="John Doe"
                   className="border capitalize p-3 rounded-full"
-                  pattern=".{3,}[A-Za-z ]"
                   title="Fill With Your Full Name"
                 />
               </div>

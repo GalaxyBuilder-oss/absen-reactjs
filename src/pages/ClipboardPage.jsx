@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useOutletContext } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useState } from "react";
@@ -51,7 +52,7 @@ const ClipboardPage = () => {
   // helper method
   const filterList = (data, property) => {
     return data
-      .filter((item) => item[property] && (item.dormitory === dormy[0] || item.dormitory === dormy[1]))
+      .filter((item) => item[property] && dormy === item.dormitory)
       .map((item) => `- ${item.name}`)
       .join("\n");
   };
@@ -64,18 +65,22 @@ const ClipboardPage = () => {
     let text = `*SHALAT ${selectedPrayerTime.toUpperCase()} HARI ${formattedDate}*\n\nTidak Hadir:\n${alphaList}\n\nIzin:\n${permitList}\n\n*Catatan:*\n- *Konfirmasi Kehadiran Atau Izin Lewat Wa Div Kerohanian Yang Mencatat*\n- *Jika Poin Izin Habis Maka Tidak Bisa Izin Lagi, poin izin akan di reset setelah pembinaan*`;
     navigator.clipboard.writeText(text);
 
+    // console.log(dormy)
+    setDormy(null)
+    document.querySelectorAll("#dormy").forEach((e) => {
+      e.checked = false
+    })
     toast.success("Copied Success!", defaultSettings);
   };
 
   const handleChecked = (e) => {
-    const { value } = e.target;
-    setDormy([...dormy, value])
-    console.log(dormy);
+    const value = e.target.value;
+    setDormy(value)
   };
 
   return (
     <main className="h-[76vh] mx-2 bg-green-600 px-4 border-green-600">
-      <div className="lg:h-[76vh] rounded-lg bg-white relative p-4">
+      <div className="h-[76vh] rounded-lg bg-white relative p-4">
 
         <a href="/">&lt;- Back</a>
         <div>
@@ -91,13 +96,13 @@ const ClipboardPage = () => {
           ))}
           </select>
         </div>
-        <ul>
+        <ul className="my-4">
           {dormitories.map((dormitory, i) => (
             <li key={i}>
               <input
                 type="checkbox"
                 name="dormitory"
-                id=""
+                id="dormy"
                 value={dormitory}
                 onChange={handleChecked}
               />
@@ -105,7 +110,7 @@ const ClipboardPage = () => {
             </li>
           ))}
         </ul>
-        <button onClick={handleClick}>Copy</button>
+        <button className="px-4 border rounded-md hover:bg-slate-200" onClick={handleClick}>Copy</button>
       </div>
     </main >
   );

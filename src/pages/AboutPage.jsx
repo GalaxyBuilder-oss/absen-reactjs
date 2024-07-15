@@ -2,7 +2,7 @@ const AboutPage = () => {
   return (
     <main className="h-[76vh] mx-2 bg-green-600 px-4 border-green-600">
       <div className="lg:h-[76vh] rounded-lg bg-white relative py-2">
-        <div className="h-[76vh] bg-gray-50 px-4 py-8 rounded-xl overflow-y-scroll">
+        <div className="h-[76vh] bg-gray-50 px-8 py-8 rounded-xl overflow-y-scroll">
           <h1 className="font-bold text-2xl uppercase text-center">
             Absensi Sholat Program Beasiswa PUB
           </h1>
@@ -14,7 +14,7 @@ const AboutPage = () => {
           </p>
           <hr className="my-4" />
           <h2 className="font-semibold text-xl">Fitur</h2>
-          <ul className="features text-justify flex flex-col gap-4 indent-4">
+          <ul className="features text-justify flex flex-col gap-4 indent-4 list-decimal">
             <li>
               Pengelolaan Mahasiswa: Menyimpan dan mengelola informasi
               mahasiswa, termasuk nama, ID, dan afiliasi Program Beasiswa PUB.
@@ -60,7 +60,7 @@ const AboutPage = () => {
 
           <hr className="my-4" />
           <h2 className="font-semibold text-xl">Manfaat</h2>
-          <ul className="benefits text-justify indent-4">
+          <ul className="benefits text-justify indent-4 list-decimal">
             <li>
               Pengelolaan Kehadiran yang Disederhanakan: Mempermudah proses
               pencatatan dan pelacakan kehadiran sholat mahasiswa.

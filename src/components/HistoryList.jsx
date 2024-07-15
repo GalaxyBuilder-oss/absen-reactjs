@@ -5,7 +5,7 @@ import { InfoIcon } from "lucide-react";
 const HistoryList = ({ histories, isLoading }) => {
 
   return (
-    <div className="w-full h-[70vh] lg:h-[63vh] flex flex-col gap-2 overflow-y-scroll p-2 lg:text-xl">
+    <div className="w-full h-[70vh] sm:h-[63vh] flex flex-col gap-2 overflow-y-scroll p-2 lg:text-xl">
       {isLoading ? (
         <div className="text-center text-xl lg:text-2xl font-mono">
           Data Is Loading...

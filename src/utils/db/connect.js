@@ -5,7 +5,6 @@ import { getDatabase, ref, child, get, set } from "firebase/database";
 import { getPerformance } from "firebase/performance";
 import { v4 } from "uuid";
 
-
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
   authDomain: "absensi-pub.firebaseapp.com",
@@ -101,7 +100,6 @@ export const addHistory = async (
 export const deleteData = async (id) => {
   return await get(ref(db, "data/users/")).then((snapshot) => {
     if (snapshot.exists()) {
-
       // Mendapatkan nilai array dari snapshot
       const dataArray = snapshot.val();
 

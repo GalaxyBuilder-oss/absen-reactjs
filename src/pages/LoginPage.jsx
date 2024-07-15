@@ -17,7 +17,6 @@ const LoginPage = () => {
       .then(() => {
         // Signed in
 
-        console.log("Logged In...");
         localStorage.setItem("loggedIn", true);
         location.href = "/";
       })

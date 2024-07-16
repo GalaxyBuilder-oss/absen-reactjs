@@ -1,8 +1,8 @@
 const AboutPage = () => {
   return (
-    <main className="h-[76vh] mx-2 bg-green-600 px-4 border-green-600">
-      <div className="lg:h-[76vh] rounded-lg bg-white relative py-2">
-        <div className="h-[76vh] bg-gray-50 px-8 py-8 rounded-xl overflow-y-scroll">
+    <main className="w-[96vw] h-[76vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
+      <div className="h-[76vh] rounded-lg bg-white relative py-2">
+        <div className="h-[74vh] bg-gray-50 px-8 py-8 rounded-xl overflow-y-scroll">
           <h1 className="font-bold text-2xl uppercase text-center">
             Absensi Sholat Program Beasiswa PUB
           </h1>

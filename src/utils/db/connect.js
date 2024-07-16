@@ -7,10 +7,10 @@ import { v4 } from "uuid";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
-  authDomain: "absensi-pub.firebaseapp.com",
-  databaseURL: "https://absensi-pub-default-rtdb.firebaseio.com",
-  projectId: "absensi-pub",
-  storageBucket: "absensi-pub.appspot.com",
+  authDomain: import.meta.env.VITE_AUTHDOMAIN,
+  databaseURL: import.meta.env.VITE_DATABASE_URL,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_MESSAGING_ID,
   appId: import.meta.env.VITE_APP_ID,
   measurementId: import.meta.env.VITE_MEASUREMENT_ID,
@@ -78,7 +78,6 @@ export const addHistory = async (
     { ...data }
   )
     .then(() => {
-      // Data saved successfully!
       responseAPI = {
         statusCode: 200,
         message: "Successfully Saved History",
@@ -86,7 +85,6 @@ export const addHistory = async (
       };
     })
     .catch((error) => {
-      // The write failed...
       responseAPI = {
         statusCode: 400,
         message: error,
@@ -100,13 +98,10 @@ export const addHistory = async (
 export const deleteData = async (id) => {
   return await get(ref(db, "data/users/")).then((snapshot) => {
     if (snapshot.exists()) {
-      // Mendapatkan nilai array dari snapshot
       const dataArray = snapshot.val();
 
-      // Memodifikasi array dan mengecualikan id yang ini di hapus
       const modifiedArray = dataArray.filter((item) => item.id !== id);
 
-      // Simpan array yang telah dimodifikasi kembali ke Firebase Database
       return setDBData(modifiedArray);
     } else {
       console.log("Data tidak ditemukan.");

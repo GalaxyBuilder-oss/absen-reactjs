@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.min.css";
+import Cookies from "js-cookie"
 
 export default function App() {
   const t = new Date();
@@ -17,7 +18,7 @@ export default function App() {
   const [year, setYear] = useState(t.getFullYear());
   const [filteredData, setFilteredData] = useState([]);
   const [menu, setMenu] = useState(0);
-  const showIsAdmin = JSON.parse(localStorage.getItem("loggedIn"));
+  const showIsAdmin = JSON.parse(Cookies.get("loggedIn") || "false");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedPrayerTime, setSelectedPrayerTime] = useState("Shubuh");
   const [dormitory, setDormitory] = useState("Asrama Ikhwan");

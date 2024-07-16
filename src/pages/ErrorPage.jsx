@@ -12,7 +12,7 @@ const ErrorPage = () => {
   let errorMessage = "An unexpected error occurred."; // Default message
 
   if (error) {
-    errorMessage = error.error.message || errorMessage;
+    errorMessage = error.error?.message || errorMessage;
 
     // Consider creating custom error messages for common scenarios:
     if (error.status === 404) {
@@ -40,11 +40,9 @@ const ErrorPage = () => {
                 See our FAQs for more info
               </a>
             </p>
-            {error?.status === 404 && (
-              <a href="/" className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold">
-                Go Back Home
-              </a>
-            )}
+            <a href="/" className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold">
+              Go Home
+            </a>
           </div>
         </div>
       </main>

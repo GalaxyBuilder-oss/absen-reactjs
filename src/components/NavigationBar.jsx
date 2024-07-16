@@ -17,7 +17,7 @@ const NavigationBar = ({ isAdmin, setMenu, menu }) => {
 
   return (
     <>
-      <nav className="mt-2 mx-2 bg-green-600 py-2 px-4 sm:p-4 rounded-t-lg text-white transition-all">
+      <nav className="w-[96vw] mt-2 mx-2 bg-green-600 py-2 px-4 sm:p-4 rounded-t-lg text-white transition-all">
         <div className="h-[10vh] flex justify-between items-center align-middle px-4">
           <div className="font-bold text-2xl uppercase text-center sm:text-left">
             <a {...menu === 1 ? { } : { href: '/' }}>
@@ -35,7 +35,7 @@ const NavigationBar = ({ isAdmin, setMenu, menu }) => {
               onClick={() => setShow(!show)}
             >
               {show ? (
-                <XIcon />
+                <XIcon width={24} height={24} />
               ) : (
                 <MenuIcon />
               )}
@@ -78,7 +78,7 @@ const NavigationBar = ({ isAdmin, setMenu, menu }) => {
         </div>
         {/* MobileView */}
         {show && (
-          <div className="flex justify-between items-center align-middle bg-green-600 mx-2 py-2 px-4 sm:p-4 transition-all">
+          <div className="w-full flex justify-between items-center align-middle bg-green-600 mx-2 py-2 px-4 sm:p-4 transition-all">
             {isAdmin && (
               <a
                 href="/add"

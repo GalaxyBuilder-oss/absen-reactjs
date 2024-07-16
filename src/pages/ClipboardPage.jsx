@@ -79,7 +79,7 @@ const ClipboardPage = () => {
   };
 
   return (
-    <main className="h-[76vh] mx-2 bg-green-600 px-4 border-green-600">
+    <main className="w-[96vw] h-[76vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
       <div className="h-[76vh] rounded-lg bg-white relative p-4">
 
         <a href="/">&lt;- Back</a>

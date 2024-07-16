@@ -1,34 +1,33 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../utils/db/connect";
 import { useOutletContext } from "react-router-dom";
+import Cookies from "js-cookie"
 
 const LoginPage = () => {
   const [, , , , , , , showIsAdmin, , , , , , , , , ,] = useOutletContext();
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    e.target[3].disabled = true;
-    e.target[3].classList.remove("cursor-pointer");
-    e.target[3].classList.add("cursor-wait");
+    const { email, password, submit } = e.target
 
-    const email = e.target.username.value;
-    const password = e.target.password.value;
-    signInWithEmailAndPassword(auth, email, password)
+    submit.disabled = true;
+    submit.classList.remove("cursor-pointer");
+    submit.classList.add("cursor-wait");
+
+    signInWithEmailAndPassword(auth, email.value, password.value)
       .then(() => {
-        // Signed in
 
-        localStorage.setItem("loggedIn", true);
+        Cookies.set('loggedIn', true, { expires: 7 })
         location.href = "/";
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
-        // ..
       });
   };
 
-  if (showIsAdmin) window.location.href = "/";
+  if (showIsAdmin) location.href = "/";
   return (
     <>
       <main className="h-[76vh] mx-2 bg-green-600 px-4 border-green-600">
@@ -43,11 +42,11 @@ const LoginPage = () => {
               className="flex flex-col gap-2 mt-4"
             >
               <div className="flex flex-col gap-2 my-2">
-                <label htmlFor="username">USERNAME</label>
+                <label htmlFor="email">E-mail</label>
                 <input
                   type="text"
-                  id="username"
-                  name="username"
+                  id="email"
+                  name="email"
                   className="p-3 bg-slate-100 rounded-full"
                   autoComplete="true"
                   pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
@@ -73,6 +72,7 @@ const LoginPage = () => {
               <div className="flex flex-col gap-2 my-2">
                 <input
                   type="submit"
+                  name="submit"
                   className="border rounded-full p-3 hover:bg-gray-300 cursor-pointer"
                 />
               </div>

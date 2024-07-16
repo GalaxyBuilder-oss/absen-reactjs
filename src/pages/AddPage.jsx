@@ -112,7 +112,7 @@ const AddPage = () => {
     return data;
   };
   return (
-    <main className="h-[76vh] mx-2 bg-green-600 px-4 border-green-600">
+    <main className="w-[96vw] h-[76vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
       <div className="h-[76vh] lg:h-[76vh] rounded-lg bg-white relative px-2 overflow-y-scroll">
         <div className="flex px-2 py-4 gap-4">
           <button

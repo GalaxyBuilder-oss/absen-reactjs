@@ -3,8 +3,8 @@ import { useOutletContext } from "react-router-dom";
 import { ToastOptions, toast } from "react-toastify";
 import { ChangeEvent, useState } from "react";
 import { defaultSettings } from "../utils/toastConfig";
-import { MemberPUB } from "@/types/MemberPUB";
-import { OutletContextType } from "@/types/OutletContextType";
+import { MemberPUB } from "../types/MemberPUB";
+import { OutletContextType } from "../types/OutletContextType";
 
 const ClipboardPage = () => {
   const [dormy, setDormy] = useState<string[]>([]);

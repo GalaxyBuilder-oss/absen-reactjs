@@ -3,8 +3,16 @@ import { btn } from "./style";
 import { addHistory } from "../../utils/db/connect";
 import { toast } from "react-toastify";
 import { defaultSettings } from "../../utils/toastConfig";
+import { MemberPUB } from "../../types/MemberPUB";
 
-const FloatingButton = ({ data, selectedPrayerTime, dormitory, isAdmin }) => {
+interface FloatingButtonProps {
+  data: MemberPUB[],
+  selectedPrayerTime: string,
+  dormitory: string,
+  isAdmin: boolean
+}
+
+const FloatingButton: React.FC<FloatingButtonProps> = ({ data, selectedPrayerTime, dormitory, isAdmin }) => {
   const d = new Date();
   const DATE = d.getDate();
   const MONTH_NUM = d.getMonth() + 1;

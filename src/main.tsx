@@ -8,7 +8,6 @@ import ErrorPage from "./pages/ErrorPage";
 import AboutPage from "./pages/AboutPage";
 import AddPage from "./pages/AddPage";
 import LoginPage from "./pages/LoginPage";
-import LogoutPage from "./pages/LogoutPage";
 
 const router = createBrowserRouter([
   {
@@ -34,10 +33,6 @@ const router = createBrowserRouter([
       {
         path: '/copy',
         element: <ClipboardPage />
-      },
-      {
-        path: '/logout',
-        element: <LogoutPage />
       },
     ],
     errorElement: <ErrorPage />

@@ -4,17 +4,23 @@ import NavigationBar from "../components/NavigationBar";
 import { useEffect } from "react";
 import { HandIcon } from "lucide-react"
 
+interface RouteError {
+  error?: {
+    message?: string;
+  };
+  status?: number;
+}
+
 const ErrorPage = () => {
-  const error = useRouteError();
+  const error : RouteError = useRouteError() as RouteError;
 
   useEffect(() => console.error(error), [error]);
 
-  let errorMessage = "An unexpected error occurred."; // Default message
+  let errorMessage: string = "An unexpected error occurred.";
 
   if (error) {
     errorMessage = error.error?.message || errorMessage;
 
-    // Consider creating custom error messages for common scenarios:
     if (error.status === 404) {
       errorMessage = "We couldn't find the page you requested. ";
     } else if (error.status === 500) {
@@ -25,11 +31,11 @@ const ErrorPage = () => {
   return (
     <>
       <header>
-        <NavigationBar />
+        <NavigationBar  />
       </header>
-      <main className="h-[76vh] mx-2 bg-green-600 px-4 border-green-600">
-        <div className="flex flex-col items-center lg:h-[76vh] rounded-lg bg-white relative p-4 text-center">
-          <HandIcon className="w-full text-4xl mb-4 text-center" shake={true} />
+      <main className="w-[96vw] h-[76vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
+        <div className="flex flex-col items-center h-[76vh] rounded-lg bg-white relative p-4 text-center">
+          <HandIcon className="w-full text-4xl mb-4 text-center" />
           {/* Optional subtle animation */}
           <h1>Aww, Snap!</h1>
           <div>

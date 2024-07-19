@@ -1,11 +1,17 @@
-/* eslint-disable react/prop-types */
+ 
+import { MemberPUB } from "../types/MemberPUB";
 import FormGroup from "./style/FormGroup";
 import { InfoIcon } from "lucide-react";
 
-const HistoryList = ({ histories, isLoading }) => {
+interface HistoryListProps {
+  histories: MemberPUB[],
+  isLoading: boolean
+}
+
+const HistoryList: React.FC<HistoryListProps> = ({ histories, isLoading }) => {
 
   return (
-    <div className="w-full h-[70vh] sm:h-[63vh] flex flex-col gap-2 overflow-y-scroll p-2 lg:text-xl">
+    <div className="w-full h-[63vh] sm:h-[61vh] lg:h-[60vh] flex flex-col gap-2 overflow-y-scroll p-2 lg:text-xl">
       {isLoading ? (
         <div className="text-center text-xl lg:text-2xl font-mono">
           Data Is Loading...

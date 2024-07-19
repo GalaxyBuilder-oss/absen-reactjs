@@ -1,11 +1,13 @@
-/* eslint-disable react/prop-types */
+ 
 import { useOutletContext } from "react-router-dom";
-import { toast } from "react-toastify";
-import { useState } from "react";
+import { ToastOptions, toast } from "react-toastify";
+import { ChangeEvent, useState } from "react";
 import { defaultSettings } from "../utils/toastConfig";
+import { MemberPUB } from "@/types/MemberPUB";
+import { OutletContextType } from "@/types/OutletContextType";
 
 const ClipboardPage = () => {
-  const [dormy, setDormy] = useState([]);
+  const [dormy, setDormy] = useState<string[]>([]);
   const [
     handlePrayerTime,
     ,
@@ -24,7 +26,7 @@ const ClipboardPage = () => {
     selectedPrayerTime,
     dormitories,
     t,
-  ] = useOutletContext();
+  ]: OutletContextType = useOutletContext();
   const prayerTimeList = ["Shubuh", "Dzuhur", "Ashar", "Maghrib", "Isya"];
 
   const dateProperties = {
@@ -50,9 +52,9 @@ const ClipboardPage = () => {
   const YEAR = t.getFullYear();
 
   // helper method
-  const filterList = (data, property) => {
+  const filterList = (data: MemberPUB[], property: keyof MemberPUB) => {
     return data
-      .filter((item) => item[property] && dormy === item.dormitory)
+      .filter((item) => item[property] && dormy.includes(item.dormitory))
       .map((item) => `- ${item.name}`)
       .join("\n");
   };
@@ -62,26 +64,25 @@ const ClipboardPage = () => {
     const alphaList = filterList(data, "alpha");
     const permitList = filterList(data, "permit");
     const formattedDate = `${DAYS.toUpperCase()}, ${DATE} ${MONTH.toUpperCase()} ${YEAR}`;
-    let text = `*SHALAT ${selectedPrayerTime.toUpperCase()} HARI ${formattedDate}*\n\nTidak Hadir:\n${alphaList}\n\nIzin:\n${permitList}\n\n*Catatan:*\n- *Konfirmasi Kehadiran Atau Izin Lewat Wa Div Kerohanian Yang Mencatat*\n- *Jika Poin Izin Habis Maka Tidak Bisa Izin Lagi, poin izin akan di reset setelah pembinaan*`;
+    const text = `*SHALAT ${selectedPrayerTime.toUpperCase()} HARI ${formattedDate}*\n\nTidak Hadir:\n${alphaList}\n\nIzin:\n${permitList}\n\n*Catatan:*\n- *Konfirmasi Kehadiran Atau Izin Lewat Wa Div Kerohanian Yang Mencatat*\n- *Jika Poin Izin Habis Maka Tidak Bisa Izin Lagi, poin izin akan di reset setelah pembinaan*`;
     navigator.clipboard.writeText(text);
 
     // console.log(dormy)
-    setDormy(null)
-    document.querySelectorAll("#dormy").forEach((e) => {
-      e.checked = false
-    })
-    toast.success("Copied Success!", defaultSettings);
+    setDormy([]);
+    document.querySelectorAll<HTMLInputElement>("#dormy").forEach((e) => {
+      e.checked = false;
+    });
+    toast.success("Copied Success!", defaultSettings as ToastOptions);
   };
 
-  const handleChecked = (e) => {
+  const handleChecked = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setDormy(value)
+    setDormy(dormy.filter((dorm) => dorm.includes(value)));
   };
 
   return (
     <main className="w-[96vw] h-[76vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
       <div className="h-[76vh] rounded-lg bg-white relative p-4">
-
         <a href="/">&lt;- Back</a>
         <div>
           Waktu Sholat :
@@ -89,15 +90,16 @@ const ClipboardPage = () => {
             name="prayTimes"
             className="border rounded-md p-0 sm:px-4"
             onChange={handlePrayerTime}
-          >{prayerTimeList.map((time, i) => (
-            <option key={i} value={time} className="bg-gray-200 rounded-none">
-              {time}
-            </option>
-          ))}
+          >
+            {prayerTimeList.map((time, i) => (
+              <option key={i} value={time} className="bg-gray-200 rounded-none">
+                {time}
+              </option>
+            ))}
           </select>
         </div>
         <ul className="my-4">
-          {dormitories.map((dormitory, i) => (
+          {dormitories.map((dormitory: string, i: React.Key) => (
             <li key={i}>
               <input
                 type="checkbox"
@@ -110,9 +112,14 @@ const ClipboardPage = () => {
             </li>
           ))}
         </ul>
-        <button className="px-4 border rounded-md hover:bg-slate-200" onClick={handleClick}>Copy</button>
+        <button
+          className="px-4 border rounded-md hover:bg-slate-200"
+          onClick={handleClick}
+        >
+          Copy
+        </button>
       </div>
-    </main >
+    </main>
   );
 };
 

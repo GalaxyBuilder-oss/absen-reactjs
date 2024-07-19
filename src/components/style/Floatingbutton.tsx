@@ -1,6 +1,5 @@
 import { SaveIcon } from "lucide-react";
 import { btn } from "./style";
-import PropTypes from "prop-types";
 import { addHistory } from "../../utils/db/connect";
 import { toast } from "react-toastify";
 import { defaultSettings } from "../../utils/toastConfig";
@@ -44,10 +43,3 @@ const FloatingButton = ({ data, selectedPrayerTime, dormitory, isAdmin }) => {
 };
 
 export default FloatingButton;
-
-FloatingButton.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object),
-  selectedPrayerTime: PropTypes.string,
-  dormitory: PropTypes.string,
-  isAdmin: PropTypes.bool,
-};

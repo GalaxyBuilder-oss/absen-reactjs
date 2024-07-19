@@ -1,9 +1,10 @@
-/* eslint-disable no-unused-vars */
+ 
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getDatabase, ref, child, get, set } from "firebase/database";
 import { getPerformance } from "firebase/performance";
 import { v4 } from "uuid";
+import { MemberPUB } from "../../types/MemberPUB";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_APIKEY,
@@ -18,7 +19,7 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 
-const perf = getPerformance(app);
+getPerformance(app);
 
 const dbRef = ref(getDatabase());
 
@@ -41,7 +42,7 @@ export const getHistories = () => {
   return res;
 };
 
-export const getHistory = (dormitory, prayerTime, year, month, date) => {
+export const getHistory = (dormitory : string, prayerTime: string, year : number, month : number, date : number) => {
   const res = get(
     child(
       dbRef,
@@ -51,7 +52,7 @@ export const getHistory = (dormitory, prayerTime, year, month, date) => {
   return res;
 };
 
-export const addData = async (data, num) => {
+export const addData = async (data : MemberPUB, num : number) => {
   const uuid = v4();
   await set(ref(db, "data/users/" + num), {
     id: uuid,
@@ -66,12 +67,12 @@ export const addData = async (data, num) => {
 };
 
 export const addHistory = async (
-  data,
-  dormitory,
-  prayerTime,
-  year,
-  month,
-  date
+  data : MemberPUB[],
+  dormitory : string,
+  prayerTime : string,
+  year : number,
+  month : number,
+  date : number
 ) => {
   await set(
     ref(db, `data/history/${dormitory}/${prayerTime}/${year}/${month}/${date}`),
@@ -95,12 +96,12 @@ export const addHistory = async (
   return responseAPI;
 };
 
-export const deleteData = async (id) => {
+export const deleteData = async (id : string) => {
   return await get(ref(db, "data/users/")).then((snapshot) => {
     if (snapshot.exists()) {
       const dataArray = snapshot.val();
 
-      const modifiedArray = dataArray.filter((item) => item.id !== id);
+      const modifiedArray = dataArray.filter((item : MemberPUB) => item.id !== id);
 
       return setDBData(modifiedArray);
     } else {
@@ -109,4 +110,4 @@ export const deleteData = async (id) => {
   });
 };
 
-export const setDBData = async (arr) => await set(ref(db, "data/users/"), arr);
+export const setDBData = async (arr : MemberPUB[]) => await set(ref(db, "data/users/"), arr);

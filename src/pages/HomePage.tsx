@@ -4,6 +4,7 @@ import ListAbsen from "../components/ListAbsen";
 import ListHeadHistory from "../components/ListHeadHistory";
 import HistoryList from "../components/HistoryList";
 import FloatingButton from "../components/style/Floatingbutton";
+import { OutletContextType } from "../types/OutletContextType";
 
 const HomePage = () => {
   const [
@@ -22,10 +23,10 @@ const HomePage = () => {
     setYear,
     histories,
     selectedPrayerTime,
-  ] = useOutletContext();
+  ]: OutletContextType = useOutletContext();
   return (
-    <main className="w-[96vw] h-[76vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
-      <div className="lg:h-[76vh] rounded-lg bg-white relative py-2">
+    <main className="w-[98vw] h-[72vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
+      <div className="h-[72vh] rounded-lg bg-white relative py-2">
         {menu === 0 ? (
           <>
             <ListHead
@@ -50,7 +51,7 @@ const HomePage = () => {
         ) : menu === 1 ? (
           <>
             <ListHeadHistory
-            dormitory={dormitory}
+              dormitory={dormitory}
               setDormitory={setDormitory}
               onShowTimeClick={handlePrayerTime}
               fetchDataHistory={fecthDataHistory}
@@ -58,12 +59,7 @@ const HomePage = () => {
               setMonth={setMonth}
               setYear={setYear}
             />
-            <HistoryList
-              fetchDataHistory={fecthDataHistory}
-              dormitory={dormitory}
-              histories={histories}
-              isLoading={isLoading}
-            />
+            <HistoryList histories={histories} isLoading={isLoading} />
           </>
         ) : (
           <>Menu Tidak Tersedia</>

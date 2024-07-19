@@ -1,8 +1,21 @@
-import Proptype from "prop-types";
+import { MemberPUB } from "../types/MemberPUB";
 import WindowFixed from "./style/WindowFixed";
 import { btnMenu } from "./style/style";
+import { FormEvent } from "react";
 
-const EditView = ({ handleClick, data, saveData }) => {
+interface EditViewProps {
+  handleClick: () => void,
+  data: MemberPUB | undefined,
+  saveData: (newData: MemberPUB) => void
+}
+
+interface MemberFormElement extends HTMLFormElement {
+  memberName: HTMLInputElement;
+  dormitory: HTMLSelectElement;
+  generation: HTMLSelectElement;
+}
+
+const EditView: React.FC<EditViewProps> = ({ handleClick, data, saveData }) => {
   const generations = [
     {
       no: 20,
@@ -20,20 +33,21 @@ const EditView = ({ handleClick, data, saveData }) => {
       count: 35,
     },
   ];
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const value = e.target.name.value.trim();
-    const dormitory = e.target.dormitory.value.trim();
-    const generation = generations.filter(
-      (gen) => gen.name === e.target.generation.value.trim()
-    )[0];
+    const form = e.target as MemberFormElement;
+    const value = form.memberName.value.trim();
+    const dormitory = form.dormitory.value.trim();
+    const generation = generations.find(
+      (gen) => gen.name === form.generation.value.trim()
+    );
 
     if (!value) return; // Jika input kosong, hentikan fungsi
     if (!dormitory) return; // Jika input kosong, hentikan fungsi
     if (!generation) return; // Jika input kosong, hentikan fungsi
 
     // Fungsi untuk mengonversi huruf pertama setiap kata menjadi kapital
-    const capitalizeFirstLetter = (str) => {
+    const capitalizeFirstLetter = (str: string) => {
       return str.charAt(0).toUpperCase() + str.slice(1);
     };
 
@@ -44,7 +58,7 @@ const EditView = ({ handleClick, data, saveData }) => {
       .join(" ");
 
     const dataNew = {
-      id: data.id,
+      id: data?.id,
       name: capitalizedValue,
       dormitory: dormitory,
       generation: generation,
@@ -55,9 +69,9 @@ const EditView = ({ handleClick, data, saveData }) => {
     };
 
     saveData(dataNew);
-    e.target.name.value = "";
-    e.target.dormitory.selectedIndex = "0";
-    e.target.generation.selectedIndex = "0";
+    form.memberName.value = "";
+    form.dormitory.selectedIndex = 0;
+    form.generation.selectedIndex = 0;
   };
   return (
     <WindowFixed>
@@ -80,9 +94,9 @@ const EditView = ({ handleClick, data, saveData }) => {
               <label htmlFor="nama" className="px-4">NAMA</label>
               <input
                 type="text"
-                name="name"
+                name="memberName"
                 id="nama"
-                placeholder={data.name}
+                placeholder={data?.name}
                 className="border capitalize p-3 rounded-full"
                 pattern=".{3,}[A-Za-z ]" title="Fill With Your Full Name"
               />
@@ -121,12 +135,6 @@ const EditView = ({ handleClick, data, saveData }) => {
       <div className="mx-4 p-4 bg-green-600 rounded-b-xl"></div>
     </WindowFixed>
   );
-};
-
-EditView.propTypes = {
-  handleClick: Proptype.func,
-  data: Proptype.object,
-  saveData: Proptype.func,
 };
 
 export default EditView;

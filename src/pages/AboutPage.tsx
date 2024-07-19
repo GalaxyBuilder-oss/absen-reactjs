@@ -1,8 +1,8 @@
 const AboutPage = () => {
   return (
-    <main className="w-[96vw] h-[76vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
-      <div className="h-[76vh] rounded-lg bg-white relative py-2">
-        <div className="h-[74vh] bg-gray-50 px-8 py-8 rounded-xl overflow-y-scroll">
+    <main className="w-[98vw] h-[72vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
+      <div className="h-[72vh] rounded-lg bg-white relative py-2">
+        <div className="h-[70vh] bg-gray-50 px-8 py-8 rounded-xl overflow-y-scroll">
           <h1 className="font-bold text-2xl uppercase text-center">
             Absensi Sholat Program Beasiswa PUB
           </h1>
@@ -23,7 +23,7 @@ const AboutPage = () => {
               Pelacakan Kehadiran Sholat: Memungkinkan pelacakan kehadiran
               mahasiswa secara waktu nyata untuk berbagai waktu sholat (Subuh,
               Zuhur, Asar, Magrib, Isya). Menyediakan opsi untuk menandai
-              kehadiran sebagai hadir, alfa, atau dengan seizin (ijin).
+              kehadiran sebagai hadir, alfa, masbuk atau dengan seizin (ijin).
             </li>
             <li>
               Integrasi Data: Terhubung dengan basis data yang aman (Menggunakan

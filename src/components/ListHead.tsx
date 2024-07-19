@@ -1,9 +1,15 @@
-import PropsTypes from "prop-types";
+import { ChangeEventHandler } from "react";
 
-const ListHead = ({ onShowTimeClick, setDormitory, dormitory }) => {
+interface ListHeadProps {
+  dormitory: string;
+  setDormitory: (value: string) => void;
+  onShowTimeClick: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+}
+
+const ListHead: React.FC<ListHeadProps> = ({ onShowTimeClick, setDormitory, dormitory }) => {
   const prayerTimeList = ["Shubuh", "Dzuhur", "Ashar", "Maghrib", "Isya"];
 
-  const handleDormitory = (e) => {
+  const handleDormitory: ChangeEventHandler<HTMLSelectElement> = (e) => {
     setDormitory(e.target.value);
   };
 
@@ -34,12 +40,6 @@ const ListHead = ({ onShowTimeClick, setDormitory, dormitory }) => {
       </select>
     </div>
   );
-};
-
-ListHead.propTypes = {
-  onShowTimeClick: PropsTypes.func,
-  setDormitory: PropsTypes.func,
-  dormitory: PropsTypes.string,
 };
 
 export default ListHead;

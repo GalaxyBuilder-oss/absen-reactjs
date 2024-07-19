@@ -6,28 +6,13 @@ This web application is designed to manage and display data related to dormitori
 
 ## Table of Contents
 
-1. [Project Structure](#project-structure)
-2. [Components](#components)
-3. [State Management](#state-management)
-4. [Data Fetching](#data-fetching)
-5. [Event Handling](#event-handling)
-6. [Offline Handling](#offline-handling)
-7. [Environment Variables](#environment-variables)
-8. [Dependencies](#dependencies)
-
-## Project Structure
-
-```
-src/
-├── components/
-│   ├── NavigationBar.js
-│   ├── Footer.js
-├── utils/
-│   └── db/
-│       └── connect.js
-├── App.js
-└── index.js
-```
+1. [Components](#components)
+2. [State Management](#state-management)
+3. [Data Fetching](#data-fetching)
+4. [Event Handling](#event-handling)
+5. [Offline Handling](#offline-handling)
+6. [Environment Variables](#environment-variables)
+7. [Dependencies](#dependencies)
 
 ## Components
 
@@ -302,3 +287,5 @@ Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+### Now with Typescript!!! Update v2.0

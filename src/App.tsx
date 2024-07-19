@@ -5,25 +5,29 @@ import { useEffect } from "react";
 import NavigationBar from "./components/NavigationBar";
 import Footer from "./components/Footer";
 import { Outlet } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/ReactToastify.min.css";
-import Cookies from "js-cookie"
+import Cookies from "universal-cookie";
+import { MemberPUB } from "./types/MemberPUB";
+import { defaultSettings } from "./utils/toastConfig";
 
 export default function App() {
   const t = new Date();
-  const [data, setData] = useState([]);
-  const [histories, setHistories] = useState([]);
-  const [date, setDate] = useState(t.getDate());
-  const [month, setMonth] = useState(t.getMonth() + 1);
-  const [year, setYear] = useState(t.getFullYear());
-  const [filteredData, setFilteredData] = useState([]);
-  const [menu, setMenu] = useState(0);
-  const showIsAdmin = JSON.parse(Cookies.get("loggedIn") || "false");
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedPrayerTime, setSelectedPrayerTime] = useState("Shubuh");
-  const [dormitory, setDormitory] = useState("Asrama Ikhwan");
+  const [data, setData] = useState<MemberPUB[]>([]);
+  const [histories, setHistories] = useState<MemberPUB[]>([]);
+  const [date, setDate] = useState<number>(t.getDate());
+  const [month, setMonth] = useState<number>(t.getMonth() + 1);
+  const [year, setYear] = useState<number>(t.getFullYear());
+  const [filteredData, setFilteredData] = useState<MemberPUB[]>([]);
+  const [menu, setMenu] = useState<number>(0);
+  const cookies = new Cookies();
+  const showIsAdmin : boolean = JSON.parse(cookies.get("loggedIn") || "false");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [selectedPrayerTime, setSelectedPrayerTime] =
+    useState<string>("Shubuh");
+  const [dormitory, setDormitory] = useState<string>("Asrama Ikhwan");
 
-  const dormitories = [
+  const dormitories: string[] = [
     "Asrama Ikhwan",
     "Asrama Putra",
     "Asrama Putri",
@@ -33,8 +37,7 @@ export default function App() {
   // declaration object
   document.title = import.meta.env.VITE_APP_NAME;
 
-
-  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
 
   useEffect(() => {
     const handleOnline = () => {
@@ -54,7 +57,7 @@ export default function App() {
     };
   }, []);
 
-  const handlePrayerTime = (time) => {
+  const handlePrayerTime = (time: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedPrayerTime(time.target.value);
   };
 
@@ -93,27 +96,24 @@ export default function App() {
   }, [isOnline]);
 
   useEffect(() => {
-    let dataFiltered = data.filter((item) => {
+    const dataFiltered = data.filter((item) => {
       if (item.dormitory === dormitory) return item;
     });
     setFilteredData(dataFiltered);
   }, [data, dormitory]);
 
   useEffect(() => {
-    fecthDataHistory()
-  }, [dormitory, date, selectedPrayerTime])
+    fecthDataHistory();
+  }, [dormitory, date, selectedPrayerTime]);
+
+  useEffect(()=>{
+    !isOnline && toast.error("Anda Offline", defaultSettings)
+  })
 
   return (
     <>
       {/* <h1>{isOnline ? "Online" : "Offline"}</h1> */}
-      <NavigationBar
-        fetchData={fetchData}
-        data={data}
-        setData={setData}
-        isAdmin={showIsAdmin}
-        setMenu={setMenu}
-        menu={menu}
-      />
+      <NavigationBar isAdmin={showIsAdmin} setMenu={setMenu} menu={menu} />
       <Outlet
         context={[
           handlePrayerTime,

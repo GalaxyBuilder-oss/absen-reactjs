@@ -1,10 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import PropsTypes from "prop-types";
-import momen from "moment";
-import { useEffect } from "react";
+import moment from "moment";
+import { ChangeEventHandler, useEffect } from "react";
 import { useState } from "react";
 
-const ListHeadHistory = ({
+interface ListHeadHistoryProps {
+  dormitory: string;
+  setDormitory: (value: string) => void;
+  onShowTimeClick: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  fetchDataHistory: () => void;
+  setDate: (date: string) => void;
+  setMonth: (month: string) => void;
+  setYear: (year: string) => void;
+}
+
+const ListHeadHistory: React.FC<ListHeadHistoryProps> = ({
   dormitory,
   setDormitory,
   onShowTimeClick,
@@ -13,23 +22,23 @@ const ListHeadHistory = ({
   setMonth,
   setYear,
 }) => {
-  const prayerTimeList = ["Shubuh", "Dzuhur", "Ashar", "Maghrib", "Isya"];
-  const [defaultDate, setDefaultDate] = useState("");
+  const prayerTimeList: string[] = ["Shubuh", "Dzuhur", "Ashar", "Maghrib", "Isya"];
+  const [defaultDate, setDefaultDate] = useState<string>(moment().format("YYYY-MM-DD"));
 
 
-  const handleDormitory = (e) => {
+  const handleDormitory: ChangeEventHandler<HTMLSelectElement> = (e) => {
     setDormitory(e.target.value);
   };
 
-  function handleTime(e) {
-    setDate(momen(e.target.value).format("D"));
-    setMonth(momen(e.target.value).format("M"));
-    setYear(momen(e.target.value).format("YYYY"));
+  const handleTime: ChangeEventHandler<HTMLInputElement>  = (e) => {
+    setDate(moment(e.target.value).format("D"));
+    setMonth(moment(e.target.value).format("M"));
+    setYear(moment(e.target.value).format("YYYY"));
     setDefaultDate(e.target.value)
   }
 
   useEffect(() => {
-    setDefaultDate(momen().format("yyyy-MM-DD"));
+    setDefaultDate(moment().format("yyyy-MM-DD"));
   }, []);
 
   useEffect(() => {
@@ -75,16 +84,6 @@ const ListHeadHistory = ({
       />
     </div>
   );
-};
-
-ListHeadHistory.propTypes = {
-  dormitory: PropsTypes.string,
-  setDormitory: PropsTypes.func,
-  onShowTimeClick: PropsTypes.func,
-  fetchDataHistory: PropsTypes.func,
-  setDate: PropsTypes.func,
-  setMonth: PropsTypes.func,
-  setYear: PropsTypes.func,
 };
 
 export default ListHeadHistory;

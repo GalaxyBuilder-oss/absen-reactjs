@@ -2,14 +2,29 @@ import { useOutletContext } from "react-router-dom";
 import { addData } from "../utils/db/connect";
 import { toast } from "react-toastify";
 import moment from "moment";
-import { useState } from "react";
+import { FormEvent, ReactNode, useState } from "react";
 import { defaultSettings } from "../utils/toastConfig";
+import { OutletContextType } from "../types/OutletContextType";
+import { Generation } from "../types/Generation";
+import { MemberPUB } from "../types/MemberPUB";
+
+interface GenerationFormElement extends HTMLFormElement {
+  genName: HTMLInputElement;
+  genNo: HTMLSelectElement;
+}
+
+interface MemberFormElement extends HTMLFormElement {
+  memberName: HTMLInputElement;
+  dormitory: HTMLSelectElement;
+  generation: HTMLSelectElement;
+}
 
 const AddPage = () => {
-  const [, , , data, , fetchData, , , , , , , , , ,] = useOutletContext();
+  const [, , , data, , fetchData, , , , , , , , , ,]: OutletContextType =
+    useOutletContext();
 
   const [tab, setTab] = useState(0);
-  const [generations, setGenerations] = useState([
+  const [generations, setGenerations] = useState<Generation[]>([
     {
       no: 20,
       name: "integer",
@@ -27,109 +42,106 @@ const AddPage = () => {
     },
   ]);
 
-  const handleAddGen = (e) => {
+  const handleAddGen = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const genNumber = e.target.genNo;
-    const genName = e.target.genName;
+    const form = e.target as GenerationFormElement;
+    let genNumber = form.genNo.value.trim();
+    let genName = form.genName.value.trim();
 
-    if (genName.value.trim() === "" || genName.value.length < 0)
-      return toast.error("Name Cannot Empty!", defaultSettings);
-    if (genNumber.value.trim() === "" || genName.value.length < 0)
-      return toast.error("Please Select Generation!", defaultSettings);
-    if (
-      generations.filter((data) => data.name === genName.value.trim()).length >
-      0
-    )
+    if (!genName) return toast.error("Name Cannot Be Empty!", defaultSettings);
+    if (!genNumber)
+      return toast.error("Please Select Generation Number!", defaultSettings);
+    if (generations.some((gen) => gen.name === genName))
       return toast.error(
-        `Generation ${genName.value.trim()} was exist`,
+        `Generation ${genName} already exists`,
         defaultSettings
       );
-    if (
-      generations.filter((data) => data.no == genNumber.value.trim()).length > 0
-    )
+    if (generations.some((gen) => gen.no.toString() === genNumber))
       return toast.error(
-        `Generation ${genNumber.value.trim()} was exist with another name`,
+        `Generation ${genNumber} already exists with another name`,
         defaultSettings
       );
     const newGen = {
-      no: genNumber.value.trim(),
-      name: genName.value.trim(),
+      no: parseInt(genNumber, 10),
+      name: genName,
       count: 0,
     };
     setGenerations([...generations, newGen]);
-    genName.value = "";
-    genNumber.value = "";
+    genName = "";
+    genNumber = "";
     toast.success("Successfully Add Generations", defaultSettings);
   };
 
-  const handleOnSubmit = async (e) => {
+  const handleOnSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const value = e.target.name.value.trim();
-    const dormitory = e.target.dormitory.value.trim();
-    const generation = generations.filter(
-      (data) => data.name === e.target.generation.value.trim()
-    )[0];
+    const form = e.target as MemberFormElement;
+    const value = form.memberName.value.trim();
+    const dormitory = form.dormitory.value.trim();
+    const generation = generations.find(
+      (gen) => gen.name === form.generation.value.trim()
+    );
 
     if (!value || value.length < 3) return; // Jika input kosong, hentikan fungsi
     if (!dormitory) return; // Jika input kosong, hentikan fungsi
     if (!generation) return; // Jika input kosong, hentikan fungsi
 
-    // Fungsi untuk mengonversi huruf pertama setiap kata menjadi kapital
-    const capitalizeFirstLetter = (str) => {
+    const capitalizeFirstLetter = (str: string) => {
       return str.charAt(0).toUpperCase() + str.slice(1);
     };
 
-    // Mengonversi value menjadi kapital tiap awal kata
     const capitalizedValue = value
       .split(" ")
       .map(capitalizeFirstLetter)
       .join(" ");
 
-    const dataNew = {
+    const dataNew: MemberPUB = {
       name: capitalizedValue,
       dormitory: dormitory,
       generation: generation,
+      late: false,
       alpha: false,
       permit: false,
       present: false,
     };
 
-    await addData(dataNew, data != null ? Number.parseInt(data.length) : 0).then(() => {
-
-      toast.success("Successfully Add New Member", defaultSettings);
-      fetchData()
-    }).catch((e) => toast.error(e.message, defaultSettings));
-    e.target.name.value = "";
-    e.target.dormitory.selectedIndex = "0";
-    e.target.generation.selectedIndex = "0";
+    await addData(dataNew, data != null || data ? data.length : 0)
+      .then(() => {
+        toast.success("Successfully Add New Member", defaultSettings);
+        fetchData();
+      })
+      .catch((e) => toast.error(e.message, defaultSettings));
+    form.memberName.value = "";
+    form.dormitory.selectedIndex = 0;
+    form.generation.selectedIndex = 0;
   };
 
   const daftar = () => {
-    let data = [];
+    const data: number[] = [];
     for (let i = 0; i < 5; i++) {
-      data[i] = moment().format("YY") - 1 - i;
+      data.push(parseInt(moment().format("YY"), 10) - 1 - i);
     }
     return data;
   };
   return (
-    <main className="w-[96vw] h-[76vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
-      <div className="h-[76vh] lg:h-[76vh] rounded-lg bg-white relative px-2 overflow-y-scroll">
+    <main className="w-[98vw] h-[72vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
+      <div className="h-[72vh] lg:h-[76vh] rounded-lg bg-white relative px-2 overflow-y-scroll">
         <div className="flex px-2 py-4 gap-4">
           <button
             onClick={() => setTab(0)}
             disabled={tab === 0}
-            className={tab === 0 && "border-b-2"}
+            className={`border-b-2 ${tab === 0 ? "border-black" : ""} p-2`} // Gunakan ternary operator untuk menentukan kelas aktif
           >
             Anggota
           </button>
           <button
             onClick={() => setTab(1)}
             disabled={tab === 1}
-            className={tab === 1 && "border-b-2"}
+            className={`border-b-2 ${tab === 1 ? "border-black" : ""} p-2`} // Gunakan ternary operator untuk menentukan kelas aktif
           >
             Angkatan
           </button>
         </div>
+
         {tab === 0 && (
           <div className="rounded-b-xl px-2 py-4">
             <form
@@ -143,7 +155,7 @@ const AddPage = () => {
                 </label>
                 <input
                   type="text"
-                  name="name"
+                  name="memberName"
                   id="nama"
                   placeholder="John Doe"
                   className="border capitalize p-3 rounded-full"
@@ -184,7 +196,7 @@ const AddPage = () => {
                   </option>
                   {generations.map((generation, i) => (
                     <option key={i} value={generation.name}>
-                      Angkatan {generation.no}
+                      Angkatan {generation.no as ReactNode}
                     </option>
                   ))}
                 </select>
@@ -235,7 +247,7 @@ const AddPage = () => {
                     -- Pilih Angkatan --
                   </option>
                   {daftar().map((generation, i) => (
-                    <option key={i} value={Number.parseInt(generation)}>
+                    <option key={i} value={generation}>
                       Angkatan {generation}
                     </option>
                   ))}

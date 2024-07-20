@@ -1,18 +1,24 @@
-import { SaveIcon } from "lucide-react";
-import { btn } from "./style";
+import { HelpCircleIcon, PlusIcon, SaveIcon } from "lucide-react";
 import { addHistory } from "../../utils/db/connect";
 import { toast } from "react-toastify";
 import { defaultSettings } from "../../utils/toastConfig";
 import { MemberPUB } from "../../types/MemberPUB";
+import { Fab, Action } from "react-tiny-fab";
+import "react-tiny-fab/dist/styles.css";
 
 interface FloatingButtonProps {
-  data: MemberPUB[],
-  selectedPrayerTime: string,
-  dormitory: string,
-  isAdmin: boolean
+  data: MemberPUB[];
+  selectedPrayerTime: string;
+  dormitory: string;
+  isAdmin: boolean;
 }
 
-const FloatingButton: React.FC<FloatingButtonProps> = ({ data, selectedPrayerTime, dormitory, isAdmin }) => {
+const FloatingButton: React.FC<FloatingButtonProps> = ({
+  data,
+  selectedPrayerTime,
+  dormitory,
+  isAdmin,
+}) => {
   const d = new Date();
   const DATE = d.getDate();
   const MONTH_NUM = d.getMonth() + 1;
@@ -37,17 +43,29 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({ data, selectedPrayerTim
       .catch((e) => console.error(e));
   };
 
+  const mainButton: React.CSSProperties = {
+    backgroundColor: "#000",
+    bottom: 40 + "px",
+  };
+  if (isAdmin)
+    return (
+      <Fab
+        icon={<PlusIcon />}
+        alwaysShowTitle={false}
+        mainButtonStyles={mainButton}
+      >
+        <Action text="Help">
+          <HelpCircleIcon />
+        </Action>
+        <Action text="Save To History" onClick={handleSaveHistory}>
+          <SaveIcon />
+        </Action>
+      </Fab>
+    );
+
   return (
-    <div
-      className={`${
-        !isAdmin && "hidden "
-      }w-auto inline absolute bottom-10 lg:bottom-18 right-5 lg:right-14`}
-    >
-      <button className={btn} onClick={handleSaveHistory}>
-        <SaveIcon />
-      </button>
-    </div>
-  );
+    <></>
+  )
 };
 
 export default FloatingButton;

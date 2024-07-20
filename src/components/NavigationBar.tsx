@@ -23,7 +23,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
 
   return (
     <>
-      <nav className="w-[98vw] mt-2 mx-2 bg-green-600 py-2 px-4 sm:p-4 rounded-t-lg text-white transition-all">
+      <nav className="sm:w-[98vw] mt-2 mx-2 bg-green-600 py-2 px-4 sm:p-4 rounded-t-lg text-white transition-all">
         <div className="h-[10vh] flex justify-between items-center align-middle px-4">
           <div className="font-bold text-2xl uppercase text-center sm:text-left">
             <a {...(menu === 1 ? {} : { href: "/" })}>
@@ -47,7 +47,6 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
             {isAdmin && (
               <a
                 href="/add"
-                // onClick={handleShowAdd}
                 className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
               >
                 Add
@@ -56,7 +55,6 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
             {!isAdmin && (
               <a
                 href="/login"
-                // onClick={handleShowLogin}
                 className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
               >
                 Login

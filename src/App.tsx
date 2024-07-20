@@ -112,7 +112,6 @@ export default function App() {
 
   return (
     <>
-      {/* <h1>{isOnline ? "Online" : "Offline"}</h1> */}
       <NavigationBar isAdmin={showIsAdmin} setMenu={setMenu} menu={menu} />
       <Outlet
         context={[

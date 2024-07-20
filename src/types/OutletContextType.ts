@@ -2,22 +2,21 @@ import { ChangeEventHandler } from "react";
 import { MemberPUB } from "./MemberPUB";
 
 export type OutletContextType = [
-  // Add the correct types for each context value if needed
-  ChangeEventHandler<HTMLSelectElement>,
-  () => void,
-  string,
-  MemberPUB[],
-  MemberPUB[],
-  () => void,
-  () => void,
+  ChangeEventHandler<HTMLSelectElement>, // handlePrayerTime
+  () => void, // setDormitory
+  string, // dormitory
+  MemberPUB[], // data
+  MemberPUB[], // filteredData
+  () => void, // fetchData
+  () => void, // fetchDataHistories
   boolean, // showIsAdmin
-  boolean,
-  number,
-  (value: string) => void,
-  (value: string) => void,
-  (value: string) => void,
-  MemberPUB[],
-  string,
-  string[],
-  Date
+  boolean, // isLoading
+  number, // menu
+  (value: string) => void, // setDate
+  (value: string) => void, // setMonth
+  (value: string) => void, // setYear
+  MemberPUB[], // histories
+  string, // selectedPrayerTime
+  string[], // dormitories
+  Date, // t
 ];

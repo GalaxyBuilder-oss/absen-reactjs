@@ -1,7 +1,7 @@
  
 import { useOutletContext } from "react-router-dom";
-import { ToastOptions, toast } from "react-toastify";
-import { ChangeEvent, useState } from "react";
+import { toast } from "react-toastify";
+import { ChangeEvent, useEffect, useState } from "react";
 import { defaultSettings } from "../utils/toastConfig";
 import { MemberPUB } from "../types/MemberPUB";
 import { OutletContextType } from "../types/OutletContextType";
@@ -14,7 +14,7 @@ const ClipboardPage = () => {
     ,
     data,
     ,
-    ,
+    fetchData,
     ,
     ,
     ,
@@ -51,7 +51,6 @@ const ClipboardPage = () => {
   const MONTH = dateProperties.months[t.getMonth()];
   const YEAR = t.getFullYear();
 
-  // helper method
   const filterList = (data: MemberPUB[], property: keyof MemberPUB) => {
     return data
       .filter((item) => item[property] && dormy.includes(item.dormitory))
@@ -59,7 +58,6 @@ const ClipboardPage = () => {
       .join("\n");
   };
 
-  // action method
   const handleClick = () => {
     const alphaList = filterList(data, "alpha");
     const permitList = filterList(data, "permit");
@@ -67,22 +65,25 @@ const ClipboardPage = () => {
     const text = `*SHALAT ${selectedPrayerTime.toUpperCase()} HARI ${formattedDate}*\n\nTidak Hadir:\n${alphaList}\n\nIzin:\n${permitList}\n\n*Catatan:*\n- *Konfirmasi Kehadiran Atau Izin Lewat Wa Div Kerohanian Yang Mencatat*\n- *Jika Poin Izin Habis Maka Tidak Bisa Izin Lagi, poin izin akan di reset setelah pembinaan*`;
     navigator.clipboard.writeText(text);
 
-    // console.log(dormy)
     setDormy([]);
     document.querySelectorAll<HTMLInputElement>("#dormy").forEach((e) => {
       e.checked = false;
     });
-    toast.success("Copied Success!", defaultSettings as ToastOptions);
+    toast.success("Copied Success!", defaultSettings);
   };
 
   const handleChecked = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setDormy(dormy.filter((dorm) => dorm.includes(value)));
+    setDormy([...dormy, value]);
   };
 
+  useEffect(()=>{
+    fetchData()
+  })
+
   return (
-    <main className="w-[96vw] h-[76vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
-      <div className="h-[76vh] rounded-lg bg-white relative p-4">
+    <main className="sm:w-[98vw] h-[72vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
+      <div className="h-[72vh] rounded-lg bg-white relative p-4">
         <a href="/">&lt;- Back</a>
         <div>
           Waktu Sholat :

@@ -33,7 +33,7 @@ const ErrorPage = () => {
       <header>
         <NavigationBar  />
       </header>
-      <main className="w-[96vw] h-[76vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
+      <main className="sm:w-[96vw] h-[76vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
         <div className="flex flex-col items-center h-[76vh] rounded-lg bg-white relative p-4 text-center">
           <HandIcon className="w-full text-4xl mb-4 text-center" />
           {/* Optional subtle animation */}

@@ -1,12 +1,11 @@
-import { useOutletContext } from "react-router-dom";
 import { addData } from "../utils/db/connect";
 import { toast } from "react-toastify";
 import moment from "moment";
 import { FormEvent, ReactNode, useState } from "react";
 import { defaultSettings } from "../utils/toastConfig";
-import { OutletContextType } from "../types/OutletContextType";
 import { Generation } from "../types/Generation";
 import { MemberPUB } from "../types/MemberPUB";
+import { useAppContext } from "../components/provider/useAppContext";
 
 interface GenerationFormElement extends HTMLFormElement {
   genName: HTMLInputElement;
@@ -20,8 +19,10 @@ interface MemberFormElement extends HTMLFormElement {
 }
 
 const AddPage = () => {
-  const [, , , data, , fetchData, , , , , , , , , ,]: OutletContextType =
-    useOutletContext();
+  // const [, , , data, , fetchData, , , , , , , , , ,]: OutletContextType =
+  //   useOutletContext();
+
+  const {data, fetchData} = useAppContext()
 
   const [tab, setTab] = useState(0);
   const [generations, setGenerations] = useState<Generation[]>([

@@ -1,15 +1,12 @@
 import { User, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../utils/db/connect";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { FormEvent } from "react";
-import { OutletContextType } from "../types/OutletContextType";
 import { toast } from "react-toastify";
 import { defaultSettings } from "../utils/toastConfig";
 
 const LoginPage = () => {
-  const [, , , , , , , , , , , , , , , , ,]: OutletContextType =
-    useOutletContext();
   const cookies = new Cookies();
   const navigate = useNavigate();
   const currentUser = cookies.get("currentUser") as User;

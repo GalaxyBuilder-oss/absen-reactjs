@@ -8,9 +8,9 @@ interface ListHeadHistoryProps {
   setDormitory: (value: string) => void;
   onShowTimeClick: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   fetchDataHistory: () => void;
-  setDate: (date: string) => void;
-  setMonth: (month: string) => void;
-  setYear: (year: string) => void;
+  setDate: (date: number) => void;
+  setMonth: (month: number) => void;
+  setYear: (year: number) => void;
 }
 
 const ListHeadHistory: React.FC<ListHeadHistoryProps> = ({
@@ -31,9 +31,9 @@ const ListHeadHistory: React.FC<ListHeadHistoryProps> = ({
   };
 
   const handleTime: ChangeEventHandler<HTMLInputElement>  = (e) => {
-    setDate(moment(e.target.value).format("D"));
-    setMonth(moment(e.target.value).format("M"));
-    setYear(moment(e.target.value).format("YYYY"));
+    setDate(parseInt(moment(e.target.value).format("D")));
+    setMonth(parseInt(moment(e.target.value).format("M")));
+    setYear(parseInt(moment(e.target.value).format("YYYY")));
     setDefaultDate(e.target.value)
   }
 

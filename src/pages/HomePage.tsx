@@ -1,29 +1,45 @@
-import { useOutletContext } from "react-router-dom";
 import ListHead from "../components/ListHead";
 import ListAbsen from "../components/ListAbsen";
 import ListHeadHistory from "../components/ListHeadHistory";
 import HistoryList from "../components/HistoryList";
 import FloatingButton from "../components/style/Floatingbutton";
-import { OutletContextType } from "../types/OutletContextType";
+import { useAppContext } from "../components/provider/useAppContext";
 
 const HomePage = () => {
-  const [
-    handlePrayerTime,
-    setDormitory,
-    dormitory,
+  const {
     data,
-    filteredData,
-    fetchData,
+    dormitory,
     fecthDataHistory,
-    showIsAdmin,
+    fetchData,
+    filteredData,
+    handlePrayerTime,
+    histories,
     isLoading,
     menu,
-    setDate,
-    setMonth,
-    setYear,
-    histories,
     selectedPrayerTime,
-  ]: OutletContextType = useOutletContext();
+    setDate,
+    setDormitory,
+    showIsAdmin,
+    setMonth,
+    setYear
+  } = useAppContext();
+  // const [
+  //   handlePrayerTime,
+  //   setDormitory,
+  //   dormitory,
+  //   data,
+  //   filteredData,
+  //   fetchData,
+  //   fecthDataHistory,
+  //   showIsAdmin,
+  //   isLoading,
+  //   menu,
+  //   setDate,
+  //   setMonth,
+  //   setYear,
+  //   histories,
+  //   selectedPrayerTime,
+  // ]: OutletContextType = useOutletContext();
   return (
     <main className="sm:w-[98vw] h-[72vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
       <div className="h-[72vh] rounded-lg bg-white relative py-2">
@@ -46,6 +62,7 @@ const HomePage = () => {
               selectedPrayerTime={selectedPrayerTime}
               dormitory={dormitory}
               isAdmin={showIsAdmin}
+              fetchData={fetchData}
             />
           </>
         ) : menu === 1 ? (

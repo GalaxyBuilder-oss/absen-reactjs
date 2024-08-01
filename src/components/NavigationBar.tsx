@@ -1,17 +1,11 @@
 import { XIcon, MenuIcon } from "lucide-react";
 import { useState } from "react";
+import { useAppContext } from "./provider/useAppContext";
 
-interface NavigationBarProps {
-  isAdmin?: boolean;
-  setMenu?: (value: number) => void;
-  menu?: number;
-}
 
-const NavigationBar: React.FC<NavigationBarProps> = ({
-  isAdmin,
-  setMenu,
-  menu,
-}) => {
+
+const NavigationBar= () => {
+  const {showIsAdmin, setMenu, menu} = useAppContext()
   const [show, setShow] = useState(false);
 
   function handleSetMenu(menuNumber: number) {
@@ -44,7 +38,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
             </button>
           </div>
           <div className="hidden lg:flex align-middle items-center gap-2 text-sm xl:text-xl flex-nowrap h-full">
-            {isAdmin && (
+            {showIsAdmin && (
               <a
                 href="/add"
                 className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
@@ -52,7 +46,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
                 Add
               </a>
             )}
-            {!isAdmin && (
+            {!showIsAdmin && (
               <a
                 href="/login"
                 className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
@@ -79,7 +73,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
         {/* MobileView */}
         {show && (
           <div className="w-full flex justify-between items-center align-middle bg-green-600 mx-2 py-2 px-4 sm:p-4 transition-all">
-            {isAdmin && (
+            {showIsAdmin && (
               <a
                 href="/add"
                 className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
@@ -87,7 +81,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
                 Add
               </a>
             )}
-            {!isAdmin && (
+            {!showIsAdmin && (
               <a
                 href="/login"
                 // onClick={handleShowLogin}

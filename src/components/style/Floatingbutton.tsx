@@ -1,5 +1,5 @@
-import { HelpCircleIcon, PlusIcon, SaveIcon } from "lucide-react";
-import { addHistory } from "../../utils/db/connect";
+import { CopyIcon, HelpCircleIcon, PlusIcon, SaveIcon } from "lucide-react";
+import { addHistory, setDBData } from "../../utils/db/connect";
 import { toast } from "react-toastify";
 import { defaultSettings } from "../../utils/toastConfig";
 import { MemberPUB } from "../../types/MemberPUB";
@@ -11,6 +11,7 @@ interface FloatingButtonProps {
   selectedPrayerTime: string;
   dormitory: string;
   isAdmin: boolean;
+  fetchData: () => void
 }
 
 const FloatingButton: React.FC<FloatingButtonProps> = ({
@@ -18,18 +19,39 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
   selectedPrayerTime,
   dormitory,
   isAdmin,
+  fetchData
 }) => {
   const d = new Date();
   const DATE = d.getDate();
   const MONTH_NUM = d.getMonth() + 1;
   const YEAR = d.getFullYear();
+  const dateProperties = {
+    months: [
+      "Januari",
+      "Ferbuari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ],
+    days: ["Ahad", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"],
+  };
+  const DAYS = dateProperties.days[d.getDay()];
+  const MONTH = dateProperties.months[d.getMonth()];
 
   const handleSaveHistory = () => {
     const history = data.filter(
       (item) => !item.present && item.dormitory === dormitory
     );
 
-    // const date = "13"
+    // const date = 12
+    // const month = 7
 
     addHistory(
       history,
@@ -41,31 +63,90 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
     )
       .then(() => toast.success("Saved To History Success!", defaultSettings))
       .catch((e) => console.error(e));
+
+      data.forEach((item) => {
+        if (item.dormitory === dormitory) {
+          item.present = true;
+          item.permit = false;
+          item.alpha = false;
+          item.late = false;
+        }
+      });
+      setDBData(data)
+      fetchData()
   };
 
-  const mainButton: React.CSSProperties = {
-    backgroundColor: "#000",
-    bottom: 40 + "px",
+  const filterList = (data: MemberPUB[], property: keyof MemberPUB) => {
+    return data
+      .filter((item) => item[property] && dormitory === item.dormitory)
+      .map((item) => `- ${item.name}`)
+      .join("\n");
   };
+
+  const handleCopy = () => {
+    const alphaList = filterList(data, "alpha");
+    const permitList = filterList(data, "permit");
+    const formattedDate = `${DAYS.toUpperCase()}, ${DATE} ${MONTH.toUpperCase()} ${YEAR}`;
+    const text = `*SHALAT ${selectedPrayerTime.toUpperCase()} HARI ${formattedDate}*\n\nTidak Hadir:\n${alphaList}\n\nIzin:\n${permitList}\n\n*Catatan:*\n- *Konfirmasi Kehadiran Atau Izin Lewat Wa Div Kerohanian Yang Mencatat*\n- *Jika Poin Izin Habis Maka Tidak Bisa Izin Lagi, poin izin akan di reset setelah pembinaan*`;
+    navigator.clipboard.writeText(text);
+    document.querySelectorAll<HTMLInputElement>("#dormy").forEach((e) => {
+      e.checked = false;
+    });
+    toast.success("Copied Success!", defaultSettings);
+  };
+
   if (isAdmin)
     return (
-      <Fab
-        icon={<PlusIcon />}
-        alwaysShowTitle={false}
-        mainButtonStyles={mainButton}
-      >
-        <Action text="Help">
-          <HelpCircleIcon />
-        </Action>
-        <Action text="Save To History" onClick={handleSaveHistory}>
-          <SaveIcon />
-        </Action>
-      </Fab>
+  <>
+      <div className="lg:hidden">
+        <Fab
+          icon={<PlusIcon />}
+          alwaysShowTitle={false}
+          style={{
+            bottom: 16 + "vh",
+            right: 4 + "vw",
+          }}
+          mainButtonStyles={{
+            backgroundColor: "rgb(22 163 74)",
+          }}
+        >
+          <Action
+            text="Help"
+            style={{
+              backgroundColor: "rgb(22 163 74)",
+            }}
+          >
+            <HelpCircleIcon />
+          </Action>
+          <Action
+            text="Copy To Clipboard"
+            style={{
+              backgroundColor: "rgb(22 163 74)",
+            }}
+            onClick={handleCopy}
+          >
+            <CopyIcon />
+          </Action>
+          <Action
+            text="Save To History"
+            onClick={handleSaveHistory}
+            style={{
+              backgroundColor: "rgb(22 163 74)",
+            }}
+          >
+            <SaveIcon />
+          </Action>
+        </Fab>
+      </div>
+      <div className="absolute">
+        <button className="flex" onClick={handleCopy}>
+        <CopyIcon />{" "}Save To Clipboard
+        </button>
+      </div>
+      </>
     );
 
-  return (
-    <></>
-  )
+  return <></>;
 };
 
 export default FloatingButton;

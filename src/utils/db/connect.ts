@@ -1,4 +1,4 @@
- 
+
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getDatabase, ref, child, get, set } from "firebase/database";
@@ -31,6 +31,7 @@ let responseAPI = {
   message: "",
   data: null,
 };
+
 
 export const getData = async () => {
   const res = await get(child(dbRef, "data/users/"));

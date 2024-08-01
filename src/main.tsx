@@ -8,6 +8,7 @@ import ErrorPage from "./pages/ErrorPage";
 import AboutPage from "./pages/AboutPage";
 import AddPage from "./pages/AddPage";
 import LoginPage from "./pages/LoginPage";
+import ReportLayout from "./pages/ReportLayout";
 
 const router = createBrowserRouter([
   {
@@ -34,12 +35,16 @@ const router = createBrowserRouter([
         path: '/copy',
         element: <ClipboardPage />
       },
+      {
+        path: '/report',
+        element: <ReportLayout />
+      },
     ],
     errorElement: <ErrorPage />
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <RouterProvider router={router} />
   </React.StrictMode>

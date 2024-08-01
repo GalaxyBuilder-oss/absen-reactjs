@@ -26,7 +26,7 @@ const ListHead: React.FC<ListHeadProps> = ({ onShowTimeClick, setDormitory, dorm
         <option value="Asrama Putri">Asrama Putri</option>
         <option value="Asrama Baru">Asrama Baru</option>
       </select>
-      <a href="/copy" className="border rounded-md px-1 sm:px-4">Clipboard</a>
+      {/* <a href="/copy" className="border rounded-md px-1 sm:px-4">Clipboard</a> */}
       <select
         name="prayTimes"
         className="border rounded-md px-1 sm:px-4"

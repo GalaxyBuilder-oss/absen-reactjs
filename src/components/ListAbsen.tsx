@@ -6,23 +6,11 @@ import EditView from "./EditView";
 import { toast } from "react-toastify";
 import { defaultSettings } from "../utils/toastConfig";
 import SVGInitials from "./SVGInitials";
-import { MemberPUB } from "../types/MemberPUB";
+import { MemberPUB } from "../types/types";
+import { useAppContext } from "./provider/useAppContext";
 
-interface ListAbsenProps {
-  filteredData: MemberPUB[];
-  realData: MemberPUB[];
-  isAdmin: boolean;
-  isLoading: boolean;
-  refreshData: () => void;
-}
-
-const ListAbsen: React.FC<ListAbsenProps> = ({
-  filteredData,
-  realData,
-  isAdmin,
-  isLoading,
-  refreshData,
-}) => {
+const ListAbsen = () => {
+  const {filteredData, data, showIsAdmin, isLoading, fetchData} = useAppContext()
   const [enableDelete, setEnableDelete] = useState<boolean>(false);
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const [editData, setEditData] = useState<MemberPUB | undefined>();
@@ -31,12 +19,12 @@ const ListAbsen: React.FC<ListAbsenProps> = ({
     setShowEdit(!showEdit);
   };
 
-  const saveData = (editedData: MemberPUB) => {
-    const temp = realData.map((item) =>
-      item.id === editedData.id ? editedData : item
+  const saveData = (editedData: MemberPUB | undefined) => {
+    const temp = data.map((item) =>
+      item.id === editedData?.id ? editedData : item
     );
     setDBData(temp);
-    refreshData();
+    fetchData();
     handleShowEdit();
   };
 
@@ -46,7 +34,7 @@ const ListAbsen: React.FC<ListAbsenProps> = ({
     await deleteData(id)
       .then(() => {
         console.log("Data di tengah array berhasil dihapus.");
-        refreshData();
+        fetchData();
         setEnableDelete(false);
       })
       .catch((error) => {
@@ -94,7 +82,7 @@ const ListAbsen: React.FC<ListAbsenProps> = ({
     lateValue: boolean,
     alphaValue: boolean
   ) => {
-    const updatedData = realData.map((item) => {
+    const updatedData = data.map((item) => {
       if (item.id === id)
         return {
           ...item,
@@ -106,7 +94,7 @@ const ListAbsen: React.FC<ListAbsenProps> = ({
       return item;
     });
     setDBData(updatedData); // Memperbarui data asli
-    refreshData();
+    fetchData();
   };
 
   return (
@@ -141,7 +129,7 @@ const ListAbsen: React.FC<ListAbsenProps> = ({
                     <FormGroup>
                       <span className="">{item.name}</span>
                     </FormGroup>
-                    {isAdmin ? (
+                    {showIsAdmin ? (
                       <>
                         <div className="checkbox flex justify-between gap-4">
                           <FormGroup>
@@ -254,7 +242,7 @@ const ListAbsen: React.FC<ListAbsenProps> = ({
                     </span>
                   </FormGroup>
                   <div className="w-1/4 btn-group flex flex-col gap-4 items-end">
-                    {isAdmin ? (
+                    {showIsAdmin ? (
                       <>
                         <button
                           onClick={() => {

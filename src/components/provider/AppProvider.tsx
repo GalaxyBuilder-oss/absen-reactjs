@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { MemberPUB } from "../../types/MemberPUB";
+import { MemberPUB } from "../../types/types";
 import Cookies from "universal-cookie";
 import { getData, getHistory } from "../../utils/db/connect";
 import { toast } from "react-toastify";
@@ -15,7 +15,7 @@ export interface AppContextType {
   setDormitory: (dormitory: string) => void;
   dormitory: string;
   fetchData: () => void;
-  fecthDataHistory: () => void;
+  fetchDataHistory: () => void;
   showIsAdmin: boolean;
   isLoading: boolean;
   setMenu: (value: number) => void;
@@ -93,7 +93,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
       });
   };
 
-  const fecthDataHistory = async () => {
+  const fetchDataHistory = async () => {
     setIsLoading(true);
     await getHistory(
       encodeURIComponent(dormitory),
@@ -121,7 +121,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   }, [data, dormitory]);
 
   useEffect(() => {
-    fecthDataHistory();
+    fetchDataHistory();
   }, [dormitory, date, selectedPrayerTime]);
 
   useEffect(() => {
@@ -141,7 +141,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         setDormitory,
         dormitory,
         fetchData,
-        fecthDataHistory,
+        fetchDataHistory,
         showIsAdmin,
         isLoading,
         menu,

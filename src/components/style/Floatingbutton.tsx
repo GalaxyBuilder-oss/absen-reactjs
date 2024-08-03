@@ -2,29 +2,16 @@ import { CopyIcon, HelpCircleIcon, PlusIcon, SaveIcon } from "lucide-react";
 import { addHistory, setDBData } from "../../utils/db/connect";
 import { toast } from "react-toastify";
 import { defaultSettings } from "../../utils/toastConfig";
-import { MemberPUB } from "../../types/MemberPUB";
+import { MemberPUB } from "../../types/types";
 import { Fab, Action } from "react-tiny-fab";
 import "react-tiny-fab/dist/styles.css";
+import { useAppContext } from "../provider/useAppContext";
 
-interface FloatingButtonProps {
-  data: MemberPUB[];
-  selectedPrayerTime: string;
-  dormitory: string;
-  isAdmin: boolean;
-  fetchData: () => void
-}
-
-const FloatingButton: React.FC<FloatingButtonProps> = ({
-  data,
-  selectedPrayerTime,
-  dormitory,
-  isAdmin,
-  fetchData
-}) => {
-  const d = new Date();
-  const DATE = d.getDate();
-  const MONTH_NUM = d.getMonth() + 1;
-  const YEAR = d.getFullYear();
+const FloatingButton = () => {
+  const { t, data, selectedPrayerTime, dormitory, showIsAdmin, fetchData} = useAppContext()
+  const DATE = t.getDate();
+  const MONTH_NUM = t.getMonth() + 1;
+  const YEAR = t.getFullYear();
   const dateProperties = {
     months: [
       "Januari",
@@ -42,8 +29,8 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
     ],
     days: ["Ahad", "Senin", "Selasa", "Rabu", "Kamis", "Jum'at", "Sabtu"],
   };
-  const DAYS = dateProperties.days[d.getDay()];
-  const MONTH = dateProperties.months[d.getMonth()];
+  const DAYS = dateProperties.days[t.getDay()];
+  const MONTH = dateProperties.months[t.getMonth()];
 
   const handleSaveHistory = () => {
     const history = data.filter(
@@ -95,7 +82,7 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({
     toast.success("Copied Success!", defaultSettings);
   };
 
-  if (isAdmin)
+  if (showIsAdmin)
     return (
   <>
       <div className="lg:hidden">

@@ -2,26 +2,10 @@
 import moment from "moment";
 import { ChangeEventHandler, useEffect } from "react";
 import { useState } from "react";
+import { useAppContext } from "./provider/useAppContext";
 
-interface ListHeadHistoryProps {
-  dormitory: string;
-  setDormitory: (value: string) => void;
-  onShowTimeClick: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  fetchDataHistory: () => void;
-  setDate: (date: number) => void;
-  setMonth: (month: number) => void;
-  setYear: (year: number) => void;
-}
-
-const ListHeadHistory: React.FC<ListHeadHistoryProps> = ({
-  dormitory,
-  setDormitory,
-  onShowTimeClick,
-  fetchDataHistory,
-  setDate,
-  setMonth,
-  setYear,
-}) => {
+const ListHeadHistory = () => {
+  const { dormitory, setDormitory, handlePrayerTime, fetchDataHistory, setDate, setMonth, setYear } = useAppContext()
   const prayerTimeList: string[] = ["Shubuh", "Dzuhur", "Ashar", "Maghrib", "Isya"];
   const [defaultDate, setDefaultDate] = useState<string>(moment().format("YYYY-MM-DD"));
 
@@ -68,7 +52,7 @@ const ListHeadHistory: React.FC<ListHeadHistoryProps> = ({
       <select
         name="prayTimes"
         className="border rounded-md p-0 sm:px-4"
-        onChange={onShowTimeClick}
+        onChange={handlePrayerTime}
       >
         {prayerTimeList.map((time, i) => (
           <option key={i} value={time} className="bg-gray-200 rounded-none">

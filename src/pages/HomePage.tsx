@@ -6,77 +6,20 @@ import FloatingButton from "../components/style/Floatingbutton";
 import { useAppContext } from "../components/provider/useAppContext";
 
 const HomePage = () => {
-  const {
-    data,
-    dormitory,
-    fecthDataHistory,
-    fetchData,
-    filteredData,
-    handlePrayerTime,
-    histories,
-    isLoading,
-    menu,
-    selectedPrayerTime,
-    setDate,
-    setDormitory,
-    showIsAdmin,
-    setMonth,
-    setYear
-  } = useAppContext();
-  // const [
-  //   handlePrayerTime,
-  //   setDormitory,
-  //   dormitory,
-  //   data,
-  //   filteredData,
-  //   fetchData,
-  //   fecthDataHistory,
-  //   showIsAdmin,
-  //   isLoading,
-  //   menu,
-  //   setDate,
-  //   setMonth,
-  //   setYear,
-  //   histories,
-  //   selectedPrayerTime,
-  // ]: OutletContextType = useOutletContext();
+  const { menu } = useAppContext();
   return (
     <main className="sm:w-[98vw] h-[72vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
       <div className="h-[72vh] rounded-lg bg-white relative py-2">
         {menu === 0 ? (
           <>
-            <ListHead
-              onShowTimeClick={handlePrayerTime}
-              setDormitory={setDormitory}
-              dormitory={dormitory}
-            />
-            <ListAbsen
-              realData={data}
-              filteredData={filteredData}
-              refreshData={fetchData}
-              isAdmin={showIsAdmin}
-              isLoading={isLoading}
-            />
-            <FloatingButton
-              data={data}
-              selectedPrayerTime={selectedPrayerTime}
-              dormitory={dormitory}
-              isAdmin={showIsAdmin}
-              fetchData={fetchData}
-            />
+            <ListHead />
+            <ListAbsen />
+            <FloatingButton />
           </>
         ) : menu === 1 ? (
           <>
-            <ListHeadHistory
-              dormitory={dormitory}
-              setDormitory={setDormitory}
-              onShowTimeClick={handlePrayerTime}
-              fetchDataHistory={fecthDataHistory}
-              setDate={setDate}
-              setMonth={setMonth}
-              setYear={setYear}
-            />
-            <HistoryList histories={histories} isLoading={isLoading} />
+            <ListHeadHistory />
+            <HistoryList />
           </>
         ) : (
           <>Menu Tidak Tersedia</>

@@ -3,8 +3,7 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import { FormEvent, ReactNode, useState } from "react";
 import { defaultSettings } from "../utils/toastConfig";
-import { Generation } from "../types/Generation";
-import { MemberPUB } from "../types/MemberPUB";
+import { Generation, MemberPUB } from "../types/types";
 import { useAppContext } from "../components/provider/useAppContext";
 
 interface GenerationFormElement extends HTMLFormElement {
@@ -19,9 +18,6 @@ interface MemberFormElement extends HTMLFormElement {
 }
 
 const AddPage = () => {
-  // const [, , , data, , fetchData, , , , , , , , , ,]: OutletContextType =
-  //   useOutletContext();
-
   const {data, fetchData} = useAppContext()
 
   const [tab, setTab] = useState(0);
@@ -73,7 +69,7 @@ const AddPage = () => {
     toast.success("Successfully Add Generations", defaultSettings);
   };
 
-  const handleOnSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleAddMember = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.target as MemberFormElement;
     const value = form.memberName.value.trim();
@@ -99,6 +95,7 @@ const AddPage = () => {
       name: capitalizedValue,
       dormitory: dormitory,
       generation: generation,
+      point: 10,
       late: false,
       alpha: false,
       permit: false,
@@ -148,7 +145,7 @@ const AddPage = () => {
             <form
               action="post"
               className="flex flex-col gap-4 text-md font-semibold"
-              onSubmit={handleOnSubmit}
+              onSubmit={handleAddMember}
             >
               <div className="flex flex-col p-2 gap-2 my-2">
                 <label htmlFor="nama" className="px-4">

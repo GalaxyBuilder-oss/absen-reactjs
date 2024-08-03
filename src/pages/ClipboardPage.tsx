@@ -1,30 +1,11 @@
 import { toast } from "react-toastify";
 import { ChangeEvent, useEffect, useState } from "react";
 import { defaultSettings } from "../utils/toastConfig";
-import { MemberPUB } from "../types/MemberPUB";
+import { MemberPUB } from "../types/types";
 import { useAppContext } from "../components/provider/useAppContext";
 
 const ClipboardPage = () => {
   const [dormy, setDormy] = useState<string[]>([]);
-  // const [
-  //   handlePrayerTime,
-  //   ,
-  //   ,
-  //   data,
-  //   ,
-  //   fetchData,
-  //   ,
-  //   ,
-  //   ,
-  //   ,
-  //   ,
-  //   ,
-  //   ,
-  //   ,
-  //   selectedPrayerTime,
-  //   dormitories,
-  //   t,
-  // ]: OutletContextType = useOutletContext();
   const {handlePrayerTime, data, fetchData, selectedPrayerTime, dormitories, t} = useAppContext()
   const prayerTimeList = ["Shubuh", "Dzuhur", "Ashar", "Maghrib", "Isya"];
 

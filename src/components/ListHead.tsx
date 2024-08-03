@@ -1,12 +1,8 @@
 import { ChangeEventHandler } from "react";
+import { useAppContext } from "./provider/useAppContext";
 
-interface ListHeadProps {
-  dormitory: string;
-  setDormitory: (value: string) => void;
-  onShowTimeClick: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-}
-
-const ListHead: React.FC<ListHeadProps> = ({ onShowTimeClick, setDormitory, dormitory }) => {
+const ListHead = () => {
+  const { handlePrayerTime, setDormitory, dormitory } = useAppContext()
   const prayerTimeList = ["Shubuh", "Dzuhur", "Ashar", "Maghrib", "Isya"];
 
   const handleDormitory: ChangeEventHandler<HTMLSelectElement> = (e) => {
@@ -30,7 +26,7 @@ const ListHead: React.FC<ListHeadProps> = ({ onShowTimeClick, setDormitory, dorm
       <select
         name="prayTimes"
         className="border rounded-md px-1 sm:px-4"
-        onChange={onShowTimeClick}
+        onChange={handlePrayerTime}
       >
         {prayerTimeList.map((time, i) => (
           <option key={i} value={time} className="bg-gray-200 rounded-none">

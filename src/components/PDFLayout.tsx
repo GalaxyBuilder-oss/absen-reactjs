@@ -1,5 +1,5 @@
 import { Document, Page, View } from "@react-pdf/renderer";
-import { MemberPUB } from "../types/MemberPUB";
+import { MemberPUB } from "../types/types";
 import { ReactNode } from "react";
 import { Html } from "react-pdf-html"
 import ReactDOMServer from "react-dom/server"

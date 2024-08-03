@@ -6,7 +6,7 @@ import PDFLayout from "../components/PDFLayout";
 import { useAppContext } from "../components/provider/useAppContext";
 
 const ReportLayout = () => {
-  const {handlePrayerTime, setDormitory, dormitory, data}= useAppContext();
+  const {dormitory, data}= useAppContext();
   const date = (value: number) => {
     return (
       new Date().getDate() - (value ? value : 0) + " " + moment().format("MMM")
@@ -14,11 +14,7 @@ const ReportLayout = () => {
   };
   return (
     <>
-      <ListHead
-        dormitory={dormitory}
-        onShowTimeClick={handlePrayerTime}
-        setDormitory={setDormitory}
-      />
+      <ListHead />
       <button onClick={() => generateReport(data)}>Generate Report</button>
       <PDFDownloadLink document={<PDFLayout datas={data} dormitory={dormitory} date={date} />} fileName="contoh.pdf">
       {({ loading }) => (loading ? 'Loading document...' : <button>Download now!</button>)}

@@ -1,15 +1,11 @@
 
-import { MemberPUB } from "../types/MemberPUB";
+import { useAppContext } from "./provider/useAppContext";
 import FormGroup from "./style/FormGroup";
 import { InfoIcon } from "lucide-react";
 
-interface HistoryListProps {
-  histories: MemberPUB[],
-  isLoading: boolean
-}
+const HistoryList = () => {
 
-const HistoryList: React.FC<HistoryListProps> = ({ histories, isLoading }) => {
-
+  const {histories, isLoading} = useAppContext()
   return (
     <div className="w-full h-[63vh] sm:h-[61vh] lg:h-[60vh] flex flex-col gap-2 overflow-y-scroll p-2 lg:text-xl">
       {isLoading ? (

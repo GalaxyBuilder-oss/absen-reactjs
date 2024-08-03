@@ -1,6 +1,6 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import { MemberPUB } from "../types/MemberPUB";
+import { MemberPUB } from "../types/types";
 
 const pdf = new jsPDF();
 

@@ -1,6 +1,5 @@
-import { MemberPUB } from "../types/MemberPUB";
+import { MemberPUB } from "../types/types";
 import WindowFixed from "./style/WindowFixed";
-import { btnMenu } from "./style/style";
 import { FormEvent } from "react";
 
 interface EditViewProps {
@@ -62,6 +61,7 @@ const EditView: React.FC<EditViewProps> = ({ handleClick, data, saveData }) => {
       name: capitalizedValue,
       dormitory: dormitory,
       generation: generation,
+      point: data?.point,
       alpha: false,
       permit: false,
       late: false,
@@ -76,7 +76,7 @@ const EditView: React.FC<EditViewProps> = ({ handleClick, data, saveData }) => {
   return (
     <WindowFixed>
       <div className="absolute right-0 m-6">
-        <button className={btnMenu} onClick={handleClick}>
+        <button className={`mt-4 mx-4 bg-green-600 text-gray-50 p-4 rounded-t-xl font-bold uppercase`} onClick={handleClick}>
           Close
         </button>
       </div>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { MemberPUB } from "../types/types";

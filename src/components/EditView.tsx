@@ -76,7 +76,7 @@ const EditView: React.FC<EditViewProps> = ({ handleClick, data, saveData }) => {
   return (
     <WindowFixed>
       <div className="absolute right-0 m-6">
-        <button className={`mt-4 mx-4 bg-green-600 text-gray-50 p-4 rounded-t-xl font-bold uppercase`} onClick={handleClick}>
+        <button className={"bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"} onClick={handleClick}>
           Close
         </button>
       </div>
@@ -96,9 +96,8 @@ const EditView: React.FC<EditViewProps> = ({ handleClick, data, saveData }) => {
                 type="text"
                 name="memberName"
                 id="nama"
-                placeholder={data?.name}
+                defaultValue={data?.name}
                 className="border capitalize p-3 rounded-full"
-                pattern=".{3,}[A-Za-z ]" title="Fill With Your Full Name"
               />
             </div>
             <div className="flex flex-col gap-2 p-2">

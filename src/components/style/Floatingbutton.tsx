@@ -1,4 +1,10 @@
-import { CopyIcon, HelpCircleIcon, PlusIcon, SaveIcon } from "lucide-react";
+import {
+  CopyIcon,
+  HistoryIcon,
+  Plus,
+  PlusIcon,
+  SaveIcon,
+} from "lucide-react";
 import { addHistory, setDBData } from "../../utils/db/connect";
 import { toast } from "react-toastify";
 import { defaultSettings } from "../../utils/toastConfig";
@@ -8,7 +14,8 @@ import "react-tiny-fab/dist/styles.css";
 import { useAppContext } from "../provider/useAppContext";
 
 const FloatingButton = () => {
-  const { t, data, selectedPrayerTime, dormitory, showIsAdmin, fetchData} = useAppContext()
+  const { t, data, selectedPrayerTime, dormitory, showIsAdmin, fetchData } =
+    useAppContext();
   const DATE = t.getDate();
   const MONTH_NUM = t.getMonth() + 1;
   const YEAR = t.getFullYear();
@@ -51,16 +58,16 @@ const FloatingButton = () => {
       .then(() => toast.success("Saved To History Success!", defaultSettings))
       .catch((e) => console.error(e));
 
-      data.forEach((item) => {
-        if (item.dormitory === dormitory) {
-          item.present = true;
-          item.permit = false;
-          item.alpha = false;
-          item.late = false;
-        }
-      });
-      setDBData(data)
-      fetchData()
+    data.forEach((item) => {
+      if (item.dormitory === dormitory) {
+        item.present = true;
+        item.permit = false;
+        item.alpha = false;
+        item.late = false;
+      }
+    });
+    setDBData(data);
+    fetchData();
   };
 
   const filterList = (data: MemberPUB[], property: keyof MemberPUB) => {
@@ -84,52 +91,66 @@ const FloatingButton = () => {
 
   if (showIsAdmin)
     return (
-  <>
-      <div className="lg:hidden">
-        <Fab
-          icon={<PlusIcon />}
-          alwaysShowTitle={false}
-          style={{
-            bottom: 16 + "vh",
-            right: 4 + "vw",
-          }}
-          mainButtonStyles={{
-            backgroundColor: "rgb(22 163 74)",
-          }}
-        >
-          <Action
-            text="Help"
+      <>
+        <div className="lg:hidden p-0">
+          <Fab
+            icon={<PlusIcon />}
+            alwaysShowTitle={false}
             style={{
+              bottom: 20 + "vh",
+              right: 8 + "vw",
+            }}
+            mainButtonStyles={{
               backgroundColor: "rgb(22 163 74)",
             }}
           >
-            <HelpCircleIcon />
-          </Action>
-          <Action
-            text="Copy To Clipboard"
-            style={{
-              backgroundColor: "rgb(22 163 74)",
-            }}
-            onClick={handleCopy}
-          >
-            <CopyIcon />
-          </Action>
-          <Action
-            text="Save To History"
-            onClick={handleSaveHistory}
-            style={{
-              backgroundColor: "rgb(22 163 74)",
-            }}
-          >
-            <SaveIcon />
-          </Action>
-        </Fab>
-      </div>
-      <div className="absolute">
-        <button className="flex" onClick={handleCopy}>
-        <CopyIcon />{" "}Save To Clipboard
-        </button>
-      </div>
+            <Action
+              text="View History"
+              onClick={() => {
+                location.href = "/history";
+              }}
+              style={{
+                backgroundColor: "rgb(22 163 74)",
+              }}
+            >
+              <HistoryIcon />
+            </Action>
+            <Action
+              onClick={() => {
+                location.href = "/add";
+              }}
+              text="Add"
+              style={{
+                backgroundColor: "rgb(22 163 74)",
+              }}
+            >
+              <Plus />
+            </Action>
+            <Action
+              text="Copy To Clipboard"
+              style={{
+                backgroundColor: "rgb(22 163 74)",
+              }}
+              onClick={handleCopy}
+            >
+              <CopyIcon />
+            </Action>
+            <Action
+              text="Save To History"
+              onClick={handleSaveHistory}
+              style={{
+                backgroundColor: "rgb(22 163 74)",
+              }}
+            >
+              <SaveIcon />
+            </Action>
+          </Fab>
+        </div>
+        <div className="absolute hidden lg:block">
+          <button className="flex" onClick={handleCopy}>
+            <CopyIcon /> Save To Clipboard
+          </button>
+        </div>
       </>
     );
 

@@ -2,8 +2,7 @@ import { ChangeEventHandler } from "react";
 import { useAppContext } from "./provider/useAppContext";
 
 const ListHead = () => {
-  const { handlePrayerTime, setDormitory, dormitory } = useAppContext()
-  const prayerTimeList = ["Shubuh", "Dzuhur", "Ashar", "Maghrib", "Isya"];
+  const { handlePrayerTime, setDormitory, dormitory, prayerTimeList } = useAppContext()
 
   const handleDormitory: ChangeEventHandler<HTMLSelectElement> = (e) => {
     setDormitory(e.target.value);

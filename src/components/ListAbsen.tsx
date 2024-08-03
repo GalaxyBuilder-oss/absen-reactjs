@@ -2,31 +2,15 @@ import FormGroup from "./style/FormGroup";
 import { PenBoxIcon, Trash2, InfoIcon } from "lucide-react";
 import { deleteData, setDBData } from "../utils/db/connect";
 import { useState } from "react";
-import EditView from "./EditView";
 import { toast } from "react-toastify";
 import { defaultSettings } from "../utils/toastConfig";
 import SVGInitials from "./SVGInitials";
-import { MemberPUB } from "../types/types";
 import { useAppContext } from "./provider/useAppContext";
 
 const ListAbsen = () => {
-  const {filteredData, data, showIsAdmin, isLoading, fetchData} = useAppContext()
+  const { filteredData, data, showIsAdmin, isLoading, fetchData } =
+    useAppContext();
   const [enableDelete, setEnableDelete] = useState<boolean>(false);
-  const [showEdit, setShowEdit] = useState<boolean>(false);
-  const [editData, setEditData] = useState<MemberPUB | undefined>();
-
-  const handleShowEdit = () => {
-    setShowEdit(!showEdit);
-  };
-
-  const saveData = (editedData: MemberPUB | undefined) => {
-    const temp = data.map((item) =>
-      item.id === editedData?.id ? editedData : item
-    );
-    setDBData(temp);
-    fetchData();
-    handleShowEdit();
-  };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Anda Yakin Menghapus ini?")) return;
@@ -244,14 +228,9 @@ const ListAbsen = () => {
                   <div className="w-1/4 btn-group flex flex-col gap-4 items-end">
                     {showIsAdmin ? (
                       <>
-                        <button
-                          onClick={() => {
-                            setEditData(item);
-                            handleShowEdit();
-                          }}
-                        >
+                        <a href={`/edit/${item.id}`} target="blank">
                           <PenBoxIcon />
-                        </button>
+                        </a>
                         <button
                           onClick={() => handleDelete(item.id as string)}
                           disabled={enableDelete}
@@ -281,13 +260,6 @@ const ListAbsen = () => {
           </div>
         )}
       </div>
-      {showEdit && (
-        <EditView
-          handleClick={handleShowEdit}
-          data={editData}
-          saveData={saveData}
-        />
-      )}
     </>
   );
 };

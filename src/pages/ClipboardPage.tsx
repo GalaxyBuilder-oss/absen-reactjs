@@ -6,8 +6,7 @@ import { useAppContext } from "../components/provider/useAppContext";
 
 const ClipboardPage = () => {
   const [dormy, setDormy] = useState<string[]>([]);
-  const {handlePrayerTime, data, fetchData, selectedPrayerTime, dormitories, t} = useAppContext()
-  const prayerTimeList = ["Shubuh", "Dzuhur", "Ashar", "Maghrib", "Isya"];
+  const {handlePrayerTime, data, fetchData, selectedPrayerTime, dormitories, t, prayerTimeList} = useAppContext()
 
   const dateProperties = {
     months: [

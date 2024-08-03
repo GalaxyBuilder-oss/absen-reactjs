@@ -1,23 +1,29 @@
 import ListHead from "../components/ListHead";
 import { generateReport } from "../utils/generateReportPdf";
 import moment from "moment";
-import {PDFDownloadLink} from "@react-pdf/renderer"
+import { PDFDownloadLink } from "@react-pdf/renderer";
 import PDFLayout from "../components/PDFLayout";
 import { useAppContext } from "../components/provider/useAppContext";
+import { Authentication } from "../components/auth/Authentication";
 
 const ReportLayout = () => {
-  const {dormitory, data}= useAppContext();
+  const { dormitory, data } = useAppContext();
   const date = (value: number) => {
     return (
       new Date().getDate() - (value ? value : 0) + " " + moment().format("MMM")
     );
   };
   return (
-    <>
+    <Authentication>
       <ListHead />
       <button onClick={() => generateReport(data)}>Generate Report</button>
-      <PDFDownloadLink document={<PDFLayout datas={data} dormitory={dormitory} date={date} />} fileName="contoh.pdf">
-      {({ loading }) => (loading ? 'Loading document...' : <button>Download now!</button>)}
+      <PDFDownloadLink
+        document={<PDFLayout datas={data} dormitory={dormitory} date={date} />}
+        fileName="contoh.pdf"
+      >
+        {({ loading }) =>
+          loading ? "Loading document..." : <button>Download now!</button>
+        }
       </PDFDownloadLink>
       <table id="report-table">
         <tr className="border p-2">
@@ -26,11 +32,21 @@ const ReportLayout = () => {
           </th>
         </tr>
         <tr className="border p-2">
-          <td rowSpan={2} className="border p-2">NO</td>
-          <td rowSpan={2} className="border p-2">NAMA</td>
-          <td rowSpan={2} className="border p-2">MINUS SEBELUMNYA</td>
-          <td colSpan={7} className="border p-2 text-center">MINUS MINGGU INI</td>
-          <td rowSpan={2} className="border p-2">TOTAL</td>
+          <td rowSpan={2} className="border p-2">
+            NO
+          </td>
+          <td rowSpan={2} className="border p-2">
+            NAMA
+          </td>
+          <td rowSpan={2} className="border p-2">
+            MINUS SEBELUMNYA
+          </td>
+          <td colSpan={7} className="border p-2 text-center">
+            MINUS MINGGU INI
+          </td>
+          <td rowSpan={2} className="border p-2">
+            TOTAL
+          </td>
         </tr>
         <tr className="border p-2">
           <td className="border p-2">{date(6)}</td>
@@ -61,7 +77,7 @@ const ReportLayout = () => {
               </tr>
             ))}
       </table>
-    </>
+    </Authentication>
   );
 };
 

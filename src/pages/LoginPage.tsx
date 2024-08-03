@@ -1,6 +1,5 @@
 import { User, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../utils/db/connect";
-import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { FormEvent } from "react";
 import { toast } from "react-toastify";
@@ -8,7 +7,6 @@ import { defaultSettings } from "../utils/toastConfig";
 
 const LoginPage = () => {
   const cookies = new Cookies();
-  const navigate = useNavigate();
   const currentUser = cookies.get("currentUser") as User;
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
@@ -34,7 +32,7 @@ const LoginPage = () => {
       cookies.set("loggedIn", true, {
         expires: expireDate,
       });
-      navigate("/");
+      location.href="/"
     } catch (error) {
       submit.disabled = false;
       submit.classList.remove("cursor-wait");

@@ -9,38 +9,53 @@ import AboutPage from "./pages/AboutPage";
 import AddPage from "./pages/AddPage";
 import LoginPage from "./pages/LoginPage";
 import ReportLayout from "./pages/ReportLayout";
+import EditPage from "./pages/EditPage";
+import HistoryPage from "./pages/HistoryPage";
+import ForbiddenPage from "./pages/ForbiddenPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    children : [
+    children: [
       {
-        path: '/',
-        element: <HomePage />
+        path: "/",
+        element: <HomePage />,
       },
       {
-        path: '/about',
-        element: <AboutPage />
+        path: "/history",
+        element: <HistoryPage />,
       },
       {
-        path: '/add',
-        element: <AddPage />
+        path: "/about",
+        element: <AboutPage />,
       },
       {
-        path: '/login',
-        element: <LoginPage />
+        path: "/edit/:id",
+        element: <EditPage />,
       },
       {
-        path: '/copy',
-        element: <ClipboardPage />
+        path: "/add",
+        element: <AddPage />,
       },
       {
-        path: '/report',
-        element: <ReportLayout />
+        path: "/login",
+        element: <LoginPage />,
+      },
+      {
+        path: "/copy",
+        element: <ClipboardPage />,
+      },
+      {
+        path: "/report",
+        element: <ReportLayout />,
+      },
+      {
+        path: "/forbidden",
+        element: <ForbiddenPage />,
       },
     ],
-    errorElement: <ErrorPage />
+    errorElement: <ErrorPage />,
   },
 ]);
 

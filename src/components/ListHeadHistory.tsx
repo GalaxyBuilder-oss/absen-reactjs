@@ -5,8 +5,7 @@ import { useState } from "react";
 import { useAppContext } from "./provider/useAppContext";
 
 const ListHeadHistory = () => {
-  const { dormitory, setDormitory, handlePrayerTime, fetchDataHistory, setDate, setMonth, setYear } = useAppContext()
-  const prayerTimeList: string[] = ["Shubuh", "Dzuhur", "Ashar", "Maghrib", "Isya"];
+  const { dormitory, setDormitory, handlePrayerTime, fetchDataHistory, setDate, setMonth, setYear, prayerTimeList } = useAppContext()
   const [defaultDate, setDefaultDate] = useState<string>(moment().format("YYYY-MM-DD"));
 
 

@@ -2,10 +2,8 @@ import { XIcon, MenuIcon } from "lucide-react";
 import { useState } from "react";
 import { useAppContext } from "./provider/useAppContext";
 
-
-
-const NavigationBar= () => {
-  const {showIsAdmin, setMenu, menu} = useAppContext()
+const NavigationBar = () => {
+  const { showIsAdmin, setMenu, menu } = useAppContext();
   const [show, setShow] = useState(false);
 
   function handleSetMenu(menuNumber: number) {
@@ -56,7 +54,9 @@ const NavigationBar= () => {
             )}
             {menu === 0 && (
               <button
-                onClick={()=>handleSetMenu(1)}
+                onClick={() => {
+                  location.href="/history"
+                }}
                 className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
               >
                 History
@@ -72,15 +72,7 @@ const NavigationBar= () => {
         </div>
         {/* MobileView */}
         {show && (
-          <div className="w-full flex justify-between items-center align-middle bg-green-600 mx-2 py-2 px-4 sm:p-4 transition-all">
-            {showIsAdmin && (
-              <a
-                href="/add"
-                className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
-              >
-                Add
-              </a>
-            )}
+          <div className="w-full flex justify-between items-center align-middle bg-green-600 mx-2 py-2 px-4 sm:p-4 animate-fade-in">
             {!showIsAdmin && (
               <a
                 href="/login"
@@ -89,14 +81,6 @@ const NavigationBar= () => {
               >
                 Login
               </a>
-            )}
-            {menu === 0 && (
-              <button
-                onClick={() => handleSetMenu(1)}
-                className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
-              >
-                History
-              </button>
             )}
             <a
               href="/about"

@@ -26,6 +26,8 @@ export interface AppContextType {
   histories: MemberPUB[];
   selectedPrayerTime: string;
   dormitories: string[];
+  prayerTimeList: string[];
+  isOnline: boolean;
 }
 
 // Create context with default values
@@ -45,6 +47,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const [selectedPrayerTime, setSelectedPrayerTime] =
     useState<string>("Shubuh");
   const [dormitory, setDormitory] = useState<string>("Asrama Ikhwan");
+  const prayerTimeList = ["Shubuh", "Dzuhur", "Ashar", "Maghrib", "Isya"];
 
   const dormitories: string[] = [
     "Asrama Ikhwan",
@@ -69,6 +72,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
 
+    localStorage.setItem("statusOnOff", JSON.stringify(isOnline));
     return () => {
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
@@ -110,26 +114,26 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
-    fetchData();
+    if (isOnline) fetchData();
+    else toast.error("Gagal fetch data", defaultSettings);
   }, [isOnline]);
 
   useEffect(() => {
-    const dataFiltered = data.filter((item) => {
-      if (item.dormitory === dormitory) return item;
-    });
+    const dataFiltered =
+      data &&
+      data.filter((item) => {
+        if (item.dormitory === dormitory) return item;
+      });
     setFilteredData(dataFiltered);
   }, [data, dormitory]);
 
   useEffect(() => {
-    fetchDataHistory();
+    if (isOnline) fetchDataHistory();
+    else toast.error("Gagal fetch history", defaultSettings);
   }, [dormitory, date, selectedPrayerTime]);
 
-  useEffect(() => {
-    !isOnline && toast.error("Anda Offline", defaultSettings);
-  });
-
-   // declaration object
-   document.title = import.meta.env.VITE_APP_NAME;
+  // declaration object
+  document.title = import.meta.env.VITE_APP_NAME;
 
   return (
     <AppContext.Provider
@@ -152,6 +156,8 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         histories,
         selectedPrayerTime,
         dormitories,
+        prayerTimeList,
+        isOnline,
       }}
     >
       {children}
@@ -159,4 +165,4 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export default AppProvider
+export default AppProvider;

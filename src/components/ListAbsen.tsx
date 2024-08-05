@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { defaultSettings } from "../utils/toastConfig";
 import SVGInitials from "./SVGInitials";
 import { useAppContext } from "./provider/useAppContext";
+import { Link } from "react-router-dom";
 
 const ListAbsen = () => {
   const { filteredData, data, showIsAdmin, isLoading, fetchData } =
@@ -17,12 +18,18 @@ const ListAbsen = () => {
     setEnableDelete(true);
     await deleteData(id)
       .then(() => {
-        console.log("Data di tengah array berhasil dihapus.");
+        toast.success(
+          "Data di tengah array berhasil dihapus.",
+          defaultSettings
+        );
         fetchData();
         setEnableDelete(false);
       })
       .catch((error) => {
-        console.error("Gagal menghapus data di tengah array:", error);
+        toast.error(
+          "Gagal menghapus data di tengah array:" + error,
+          defaultSettings
+        );
       });
   };
 
@@ -83,7 +90,7 @@ const ListAbsen = () => {
 
   return (
     <>
-      <div className="w-full h-[63vh] sm:h-[61vh] lg:h-[60vh] flex flex-col gap-2 overflow-y-scroll p-2 lg:text-xl scrollbar-hide">
+      <div className="w-full h-[63vh] sm:h-[61vh] lg:h-[59vh] flex flex-col gap-2 overflow-y-scroll p-2 lg:text-xl scrollbar-hide">
         {isLoading ? (
           <div className="text-center text-xl lg:text-2xl font-mono">
             Data Is Loading...
@@ -225,12 +232,12 @@ const ListAbsen = () => {
                       {item.alpha && "Alfa"}
                     </span>
                   </FormGroup>
-                  <div className="w-1/4 btn-group flex flex-col gap-4 items-end">
+                  <div className="w-1/4 btn-group flex flex-col justify-center gap-4 items-end">
                     {showIsAdmin ? (
                       <>
-                        <a href={`/edit/${item.id}`} target="blank">
+                        <Link to={`/edit/${item.id}`} target="blank">
                           <PenBoxIcon />
-                        </a>
+                        </Link>
                         <button
                           onClick={() => handleDelete(item.id as string)}
                           disabled={enableDelete}

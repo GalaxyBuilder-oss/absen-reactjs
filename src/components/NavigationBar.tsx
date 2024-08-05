@@ -1,33 +1,56 @@
 import { XIcon, MenuIcon } from "lucide-react";
 import { useState } from "react";
 import { useAppContext } from "./provider/useAppContext";
+import { Link } from "react-router-dom";
 
 const NavigationBar = () => {
-  const { showIsAdmin, setMenu, menu } = useAppContext();
+  const { showIsAdmin } = useAppContext();
   const [show, setShow] = useState(false);
-
-  function handleSetMenu(menuNumber: number) {
-    setShow(false);
-    if (setMenu) {
-      setMenu(menuNumber);
-    }
-  }
 
   return (
     <>
-      <nav className="sm:w-[98vw] mt-2 mx-2 bg-green-600 py-2 px-4 sm:p-4 rounded-t-lg text-white transition-all">
+      <nav className="sm:w-[98vw] mt-2 mx-2 bg-green-600 p-2 sm:p-4 rounded-t-lg text-white transition-all">
         <div className="h-[10vh] flex justify-between items-center align-middle px-4">
           <div className="font-bold text-2xl uppercase text-center sm:text-left">
-            <a {...(menu === 1 ? {} : { href: "/" })}>
+            <Link to="/">
               <h1
                 className="bg-transparent uppercase hover:cursor-pointer hover:underline"
-                onClick={() => handleSetMenu(0)}
               >
                 Absensi PUB
               </h1>
-            </a>
+            </Link>
           </div>
-          <div className="sidebar lg:hidden">
+          <div className="hidden lg:flex align-middle items-center gap-2 text-sm xl:text-xl flex-nowrap">
+            {showIsAdmin && (
+              <Link
+                to="/add"
+                className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
+              >
+                Add
+              </Link>
+            )}
+            {!showIsAdmin && (
+              <Link
+                to="/login"
+                className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
+              >
+                Login
+              </Link>
+            )}
+            <Link
+              to={"/history"}
+              className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
+            >
+              History
+            </Link>
+            <Link
+              to="/about"
+              className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
+            >
+              About
+            </Link>
+          </div>
+          <div className="lg:hidden">
             <button
               className="text-white flex items-center"
               onClick={() => setShow(!show)}
@@ -35,59 +58,25 @@ const NavigationBar = () => {
               {show ? <XIcon width={24} height={24} /> : <MenuIcon />}
             </button>
           </div>
-          <div className="hidden lg:flex align-middle items-center gap-2 text-sm xl:text-xl flex-nowrap h-full">
-            {showIsAdmin && (
-              <a
-                href="/add"
-                className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
-              >
-                Add
-              </a>
-            )}
-            {!showIsAdmin && (
-              <a
-                href="/login"
-                className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
-              >
-                Login
-              </a>
-            )}
-            {menu === 0 && (
-              <button
-                onClick={() => {
-                  location.href="/history"
-                }}
-                className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
-              >
-                History
-              </button>
-            )}
-            <a
-              href="/about"
-              className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
-            >
-              About
-            </a>
-          </div>
         </div>
         {/* MobileView */}
         {show && (
           <div className="w-full flex justify-between items-center align-middle bg-green-600 mx-2 py-2 px-4 sm:p-4 animate-fade-in">
             {!showIsAdmin && (
-              <a
-                href="/login"
+              <Link
+                to="/login"
                 // onClick={handleShowLogin}
                 className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
               >
                 Login
-              </a>
+              </Link>
             )}
-            <a
-              href="/about"
+            <Link
+              to="/about"
               className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
             >
               About
-            </a>
+            </Link>
           </div>
         )}
       </nav>

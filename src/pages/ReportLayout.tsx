@@ -1,10 +1,8 @@
-import ListHead from "../components/ListHead";
 import { generateReport } from "../utils/generateReportPdf";
 import moment from "moment";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import PDFLayout from "../components/PDFLayout";
-import { useAppContext } from "../components/provider/useAppContext";
-import { Authentication } from "../components/auth/Authentication";
+import { Authentication, ListHead, useAppContext } from "../components";
 
 const ReportLayout = () => {
   const { dormitory, data } = useAppContext();

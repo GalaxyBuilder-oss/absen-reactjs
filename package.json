@@ -6,7 +6,6 @@
   "publishConfig": {
     "GalaxyBuilder-Oss:registry": "https://npm.pkg.github.com"
   },
-  "homepage": "https://galaxybuilder-oss.github.io/absen-reactjs/",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

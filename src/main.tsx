@@ -2,16 +2,19 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import ClipboardPage from "./pages/ClipboardPage";
-import ErrorPage from "./pages/ErrorPage";
-import AboutPage from "./pages/AboutPage";
-import AddPage from "./pages/AddPage";
-import LoginPage from "./pages/LoginPage";
-import ReportLayout from "./pages/ReportLayout";
-import EditPage from "./pages/EditPage";
-import HistoryPage from "./pages/HistoryPage";
-import ForbiddenPage from "./pages/ForbiddenPage";
+import {
+  AboutPage,
+  AddPage,
+  ClipboardPage,
+  EditPage,
+  EmptyPage,
+  ErrorPage,
+  ForbiddenPage,
+  HistoryPage,
+  HomePage,
+  LoginPage,
+  ReportPage,
+} from "./pages";
 
 const router = createBrowserRouter([
   {
@@ -48,11 +51,15 @@ const router = createBrowserRouter([
       },
       {
         path: "/report",
-        element: <ReportLayout />,
+        element: <ReportPage />,
       },
       {
         path: "/forbidden",
         element: <ForbiddenPage />,
+      },
+      {
+        path: "*",
+        element: <EmptyPage />,
       },
     ],
     errorElement: <ErrorPage />,

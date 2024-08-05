@@ -5,13 +5,13 @@ import {
   PlusIcon,
   SaveIcon,
 } from "lucide-react";
-import { addHistory, setDBData } from "../../utils/db/connect";
+import { addHistory, setDBData } from "../utils/db/connect";
 import { toast } from "react-toastify";
-import { defaultSettings } from "../../utils/toastConfig";
-import { MemberPUB } from "../../types/types";
+import { defaultSettings } from "../utils/toastConfig";
+import { MemberPUB } from "../types/types";
 import { Fab, Action } from "react-tiny-fab";
 import "react-tiny-fab/dist/styles.css";
-import { useAppContext } from "../provider/useAppContext";
+import { useAppContext } from "./provider/useAppContext";
 
 const FloatingButton = () => {
   const { t, data, selectedPrayerTime, dormitory, showIsAdmin, fetchData } =

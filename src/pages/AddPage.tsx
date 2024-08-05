@@ -4,8 +4,7 @@ import moment from "moment";
 import { FormEvent, ReactNode, useState } from "react";
 import { defaultSettings } from "../utils/toastConfig";
 import { Generation, MemberPUB } from "../types/types";
-import { useAppContext } from "../components/provider/useAppContext";
-import { Authentication } from "../components/auth/Authentication";
+import { Authentication, useAppContext } from "../components";
 
 interface GenerationFormElement extends HTMLFormElement {
   genName: HTMLInputElement;

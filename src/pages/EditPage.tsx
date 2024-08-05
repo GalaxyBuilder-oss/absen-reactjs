@@ -1,11 +1,10 @@
 import { useParams } from "react-router-dom";
-import { useAppContext } from "../components/provider/useAppContext";
 import { MemberPUB } from "../types/types";
 import { FormEvent, useEffect, useState } from "react";
 import { setDBData } from "../utils/db/connect";
 import { toast } from "react-toastify";
 import { defaultSettings } from "../utils/toastConfig";
-import { Authentication } from "../components/auth/Authentication";
+import { Authentication, useAppContext } from "../components";
 
 interface MemberFormElement extends HTMLFormElement {
   memberName: HTMLInputElement;
@@ -74,8 +73,7 @@ const EditPage = () => {
 
     saveData(dataNew);
 
-    toast.success("Data Berhasil Di Update", defaultSettings);
-    location.href = "/";
+    toast.success("Data Berhasil Di Update, anda bisa menutup tab ini", defaultSettings);
   };
   const saveData = (memberData: MemberPUB) => {
     const temp = data.map((item) =>

@@ -1,13 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import "react-toastify/ReactToastify.min.css";
-import Footer from "./components/Footer";
 import { Outlet } from "react-router-dom";
-import NavigationBar from "./components/NavigationBar";
+import { AppProvider, NavigationBar, Footer } from "./components";
 import { ToastContainer } from "react-toastify";
-import AppProvider from "./components/provider/AppProvider";
+import "react-toastify/ReactToastify.min.css";
 
 export default function App() {
-
   return (
     <>
       <AppProvider>

@@ -1,0 +1,11 @@
+export { default as HomePage } from "./HomePage";
+export { default as AboutPage } from "./AboutPage";
+export { default as AddPage } from "./AddPage";
+export { default as ClipboardPage } from "./ClipboardPage";
+export { default as EditPage } from "./EditPage";
+export { default as EmptyPage } from "./EmptyPage";
+export { default as ForbiddenPage } from "./ForbiddenPage";
+export { default as ErrorPage } from "./ErrorPage";
+export { default as HistoryPage } from "./HistoryPage";
+export { default as LoginPage } from "./LoginPage";
+export { default as ReportPage } from "./ReportLayout";

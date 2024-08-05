@@ -4,8 +4,10 @@ import Cookies from "universal-cookie";
 import { FormEvent } from "react";
 import { toast } from "react-toastify";
 import { defaultSettings } from "../utils/toastConfig";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
+  const navigate = useNavigate()
   const cookies = new Cookies();
   const currentUser = cookies.get("currentUser") as User;
 
@@ -32,7 +34,7 @@ const LoginPage = () => {
       cookies.set("loggedIn", true, {
         expires: expireDate,
       });
-      location.href="/"
+      location.href='/'
     } catch (error) {
       submit.disabled = false;
       submit.classList.remove("cursor-wait");
@@ -47,7 +49,7 @@ const LoginPage = () => {
       await auth.signOut();
       cookies.remove("loggedIn");
       cookies.remove("currentUser");
-      location.reload();
+      navigate(0)
     } catch (error) {
       console.error(error);
     }

@@ -5,20 +5,30 @@ import { useState } from "react";
 import { useAppContext } from "./provider/useAppContext";
 
 const ListHeadHistory = () => {
-  const { dormitory, setDormitory, handlePrayerTime, fetchDataHistory, setDate, setMonth, setYear, prayerTimeList } = useAppContext()
-  const [defaultDate, setDefaultDate] = useState<string>(moment().format("YYYY-MM-DD"));
-
+  const {
+    dormitory,
+    setDormitory,
+    handlePrayerTime,
+    fetchDataHistory,
+    setDate,
+    setMonth,
+    setYear,
+    prayerTimeList,
+  } = useAppContext();
+  const [defaultDate, setDefaultDate] = useState<string>(
+    moment().format("YYYY-MM-DD")
+  );
 
   const handleDormitory: ChangeEventHandler<HTMLSelectElement> = (e) => {
     setDormitory(e.target.value);
   };
 
-  const handleTime: ChangeEventHandler<HTMLInputElement>  = (e) => {
+  const handleTime: ChangeEventHandler<HTMLInputElement> = (e) => {
     setDate(parseInt(moment(e.target.value).format("D")));
     setMonth(parseInt(moment(e.target.value).format("M")));
     setYear(parseInt(moment(e.target.value).format("YYYY")));
-    setDefaultDate(e.target.value)
-  }
+    setDefaultDate(e.target.value);
+  };
 
   useEffect(() => {
     setDefaultDate(moment().format("yyyy-MM-DD"));

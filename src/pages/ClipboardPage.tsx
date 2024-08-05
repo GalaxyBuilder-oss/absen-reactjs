@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 import { ChangeEvent, useEffect, useState } from "react";
 import { defaultSettings } from "../utils/toastConfig";
 import { MemberPUB } from "../types/types";
-import { useAppContext } from "../components/provider/useAppContext";
+import { useAppContext } from "../components";
 
 const ClipboardPage = () => {
   const [dormy, setDormy] = useState<string[]>([]);

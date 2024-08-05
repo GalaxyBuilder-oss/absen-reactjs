@@ -1,5 +1,4 @@
-import ListHeadHistory from "../components/ListHeadHistory";
-import HistoryList from "../components/HistoryList";
+import { HistoryList, ListHeadHistory } from "../components";
 
 const HistoryPage = () => {
   return (

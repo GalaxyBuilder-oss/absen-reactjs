@@ -4,7 +4,7 @@ import { useAppContext } from "./provider/useAppContext";
 import { Link } from "react-router-dom";
 
 const NavigationBar = () => {
-  const { showIsAdmin } = useAppContext();
+  const { isAdmin } = useAppContext();
   const [show, setShow] = useState(false);
 
   return (
@@ -21,7 +21,7 @@ const NavigationBar = () => {
             </Link>
           </div>
           <div className="hidden lg:flex align-middle items-center gap-2 text-sm xl:text-xl flex-nowrap">
-            {showIsAdmin && (
+            {isAdmin && (
               <Link
                 to="/add"
                 className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
@@ -29,7 +29,7 @@ const NavigationBar = () => {
                 Add
               </Link>
             )}
-            {!showIsAdmin && (
+            {!isAdmin && (
               <Link
                 to="/login"
                 className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
@@ -62,7 +62,7 @@ const NavigationBar = () => {
         {/* MobileView */}
         {show && (
           <div className="w-full flex justify-between items-center align-middle bg-green-600 mx-2 py-2 px-4 sm:p-4 animate-fade-in">
-            {!showIsAdmin && (
+            {!isAdmin && (
               <Link
                 to="/login"
                 // onClick={handleShowLogin}

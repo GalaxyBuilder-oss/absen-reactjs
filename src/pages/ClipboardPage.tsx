@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import { ChangeEvent, useEffect, useState } from "react";
 import { defaultSettings } from "../utils/toastConfig";
-import { MemberPUB } from "../types/types";
+import { MemberPUB } from "../types";
 import { useAppContext } from "../components";
 
 const ClipboardPage = () => {

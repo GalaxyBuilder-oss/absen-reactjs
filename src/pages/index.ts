@@ -9,3 +9,4 @@ export { default as ErrorPage } from "./ErrorPage";
 export { default as HistoryPage } from "./HistoryPage";
 export { default as LoginPage } from "./LoginPage";
 export { default as ReportPage } from "./ReportLayout";
+export { default as SettingsPage } from "./SettingsPage";

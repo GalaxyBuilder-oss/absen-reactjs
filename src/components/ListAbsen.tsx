@@ -9,7 +9,7 @@ import { useAppContext } from "./provider/useAppContext";
 import { Link } from "react-router-dom";
 
 const ListAbsen = () => {
-  const { filteredData, data, showIsAdmin, isLoading, fetchData } =
+  const { filteredDatas, datas, isAdmin, isLoading, fetchData } =
     useAppContext();
   const [enableDelete, setEnableDelete] = useState<boolean>(false);
 
@@ -73,7 +73,7 @@ const ListAbsen = () => {
     lateValue: boolean,
     alphaValue: boolean
   ) => {
-    const updatedData = data.map((item) => {
+    const updatedData = datas.map((item) => {
       if (item.id === id)
         return {
           ...item,
@@ -88,6 +88,15 @@ const ListAbsen = () => {
     fetchData();
   };
 
+  const addPoint = () => {
+    const updatedData = datas.map((item) =>
+      item ? { ...item, point: 10 } : item
+    );
+
+    setDBData(updatedData);
+    fetchData();
+  };
+
   return (
     <>
       <div className="w-full h-[63vh] sm:h-[61vh] lg:h-[59vh] flex flex-col gap-2 overflow-y-scroll p-2 lg:text-xl scrollbar-hide">
@@ -95,8 +104,8 @@ const ListAbsen = () => {
           <div className="text-center text-xl lg:text-2xl font-mono">
             Data Is Loading...
           </div>
-        ) : filteredData != null && filteredData.length > 0 ? (
-          filteredData
+        ) : filteredDatas != null && filteredDatas.length > 0 ? (
+          filteredDatas
             .sort((a, b) => a.name.localeCompare(b.name))
             .map((item, i) => (
               <div
@@ -120,7 +129,7 @@ const ListAbsen = () => {
                     <FormGroup>
                       <span className="">{item.name}</span>
                     </FormGroup>
-                    {showIsAdmin ? (
+                    {isAdmin ? (
                       <>
                         <div className="checkbox flex justify-between gap-4">
                           <FormGroup>
@@ -176,56 +185,11 @@ const ListAbsen = () => {
                         </div>
                       </>
                     ) : (
-                      <div className="checkbox flex justify-between gap-4">
-                        <FormGroup>
-                          <span
-                            className={
-                              "size-4 rounded-full border " +
-                              (item.present && "bg-green-600")
-                            }
-                          >
-                            {" "}
-                          </span>
-                          <span className="">H</span>
-                        </FormGroup>
-                        <FormGroup>
-                          <span
-                            className={
-                              "size-4 rounded-full border " +
-                              (item.permit && "bg-yellow-300")
-                            }
-                          >
-                            {" "}
-                          </span>
-                          <span className="">I</span>
-                        </FormGroup>
-                        <FormGroup>
-                          <span
-                            className={
-                              "size-4 rounded-full border " +
-                              (item.late && "bg-amber-300")
-                            }
-                          >
-                            {" "}
-                          </span>
-                          <span className="">M</span>
-                        </FormGroup>
-                        <FormGroup>
-                          <span
-                            className={
-                              "size-4 rounded-full border " +
-                              (item.alpha && "bg-red-500")
-                            }
-                          >
-                            {" "}
-                          </span>
-                          <span className="">A</span>
-                        </FormGroup>
-                      </div>
+                      <span className="text-sm">Sisa Poin : {item.point}</span>
                     )}
                   </div>
-                  <FormGroup>
-                    <span className="w-1/4 hidden sm:inline-block">
+                  <FormGroup className="hidden sm:flex flex-col justify-center items-center">
+                    <span className="w-1/4 hidden sm:flex">
                       {item.present && "Hadir"}
                       {item.permit && "Izin"}
                       {item.late && "Masbuk"}
@@ -233,7 +197,7 @@ const ListAbsen = () => {
                     </span>
                   </FormGroup>
                   <div className="w-1/4 btn-group flex flex-col justify-center gap-4 items-end">
-                    {showIsAdmin ? (
+                    {isAdmin ? (
                       <>
                         <Link to={`/edit/${item.id}`} target="blank">
                           <PenBoxIcon />
@@ -266,6 +230,7 @@ const ListAbsen = () => {
             Data kosong
           </div>
         )}
+        {isAdmin && <button onClick={addPoint}>Update Data</button>}
       </div>
     </>
   );

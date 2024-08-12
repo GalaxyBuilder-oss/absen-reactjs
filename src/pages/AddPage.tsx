@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import { FormEvent, ReactNode, useState } from "react";
 import { defaultSettings } from "../utils/toastConfig";
-import { Generation, MemberPUB } from "../types/types";
+import { Generation, MemberPUB } from "../types";
 import { Authentication, useAppContext } from "../components";
 
 interface GenerationFormElement extends HTMLFormElement {
@@ -18,7 +18,7 @@ interface MemberFormElement extends HTMLFormElement {
 }
 
 const AddPage = () => {
-  const { data, fetchData } = useAppContext();
+  const { datas, fetchData } = useAppContext();
 
   const [tab, setTab] = useState(0);
   const [generations, setGenerations] = useState<Generation[]>([
@@ -102,7 +102,7 @@ const AddPage = () => {
       present: false,
     };
 
-    await addData(dataNew, data != null || data ? data.length : 0)
+    await addData(dataNew, datas != null || datas ? datas.length : 0)
       .then(() => {
         toast.success("Successfully Add New Member", defaultSettings);
         fetchData();

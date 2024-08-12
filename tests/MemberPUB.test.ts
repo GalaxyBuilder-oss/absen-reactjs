@@ -1,4 +1,4 @@
-import { DORMITORY, MemberPUB } from "./../src/types/types";
+import { MemberPUB } from "./../src/types";
 
 describe("MemberPUB", () => {
   it("MemberPUB Should support in typescript", () => {
@@ -10,7 +10,7 @@ describe("MemberPUB", () => {
         name: "Getch",
         count: 12,
       },
-      dormitory: DORMITORY.ASWAN,
+      dormitory: "Aswan",
       point: 10,
       alpha: false,
       late: false,

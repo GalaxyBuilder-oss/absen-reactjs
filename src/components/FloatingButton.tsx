@@ -1,20 +1,14 @@
-import {
-  CopyIcon,
-  HistoryIcon,
-  Plus,
-  PlusIcon,
-  SaveIcon,
-} from "lucide-react";
+import { CopyIcon, HistoryIcon, Plus, PlusIcon, SaveIcon } from "lucide-react";
 import { addHistory, setDBData } from "../utils/db/connect";
 import { toast } from "react-toastify";
 import { defaultSettings } from "../utils/toastConfig";
-import { MemberPUB } from "../types/types";
+import { MemberPUB } from "../types";
 import { Fab, Action } from "react-tiny-fab";
 import "react-tiny-fab/dist/styles.css";
 import { useAppContext } from "./provider/useAppContext";
 
 const FloatingButton = () => {
-  const { t, data, selectedPrayerTime, dormitory, showIsAdmin, fetchData } =
+  const { t, datas, selectedPrayerTime, dormitory, isAdmin, fetchData } =
     useAppContext();
   const DATE = t.getDate();
   const MONTH_NUM = t.getMonth() + 1;
@@ -40,7 +34,10 @@ const FloatingButton = () => {
   const MONTH = dateProperties.months[t.getMonth()];
 
   const handleSaveHistory = () => {
-    const history = data.filter(
+
+    if (!confirm("Anda Yakin Ingin Menyimpan Ini?")) return;
+
+    const history = datas.filter(
       (item) => !item.present && item.dormitory === dormitory
     );
 
@@ -58,7 +55,7 @@ const FloatingButton = () => {
       .then(() => toast.success("Saved To History Success!", defaultSettings))
       .catch((e) => console.error(e));
 
-    data.forEach((item) => {
+    datas.forEach((item) => {
       if (item.dormitory === dormitory) {
         item.present = true;
         item.permit = false;
@@ -66,20 +63,20 @@ const FloatingButton = () => {
         item.late = false;
       }
     });
-    setDBData(data);
+    setDBData(datas);
     fetchData();
   };
 
-  const filterList = (data: MemberPUB[], property: keyof MemberPUB) => {
-    return data
+  const filterList = (property: keyof MemberPUB) => {
+    return datas
       .filter((item) => item[property] && dormitory === item.dormitory)
       .map((item) => `- ${item.name}`)
       .join("\n");
   };
 
   const handleCopy = () => {
-    const alphaList = filterList(data, "alpha");
-    const permitList = filterList(data, "permit");
+    const alphaList = filterList("alpha");
+    const permitList = filterList("permit");
     const formattedDate = `${DAYS.toUpperCase()}, ${DATE} ${MONTH.toUpperCase()} ${YEAR}`;
     const text = `*SHALAT ${selectedPrayerTime.toUpperCase()} HARI ${formattedDate}*\n\nTidak Hadir:\n${alphaList}\n\nIzin:\n${permitList}\n\n*Catatan:*\n- *Konfirmasi Kehadiran Atau Izin Lewat Wa Div Kerohanian Yang Mencatat*\n- *Jika Poin Izin Habis Maka Tidak Bisa Izin Lagi, poin izin akan di reset setelah pembinaan*`;
     navigator.clipboard.writeText(text);
@@ -89,7 +86,7 @@ const FloatingButton = () => {
     toast.success("Copied Success!", defaultSettings);
   };
 
-  if (showIsAdmin)
+  if (isAdmin)
     return (
       <>
         <div className="lg:hidden p-0">
@@ -150,6 +147,10 @@ const FloatingButton = () => {
           <button className="flex" onClick={handleCopy}>
             <CopyIcon /> Save To Clipboard
           </button>
+          <button className="flex" onClick={handleSaveHistory}>
+            <SaveIcon /> Save To History
+          </button>
+
         </div>
       </>
     );

@@ -3,7 +3,7 @@ import { getAuth } from "firebase/auth";
 import { getDatabase, ref, child, get, set } from "firebase/database";
 import { getPerformance } from "firebase/performance";
 import { v4 } from "uuid";
-import { MemberPUB } from "../../types/types";
+import { MemberPUB } from "../../types";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_APIKEY,

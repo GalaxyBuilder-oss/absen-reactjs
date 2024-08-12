@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { MemberPUB } from "../types/types";
+import { MemberPUB } from "../types";
 import { FormEvent, useEffect, useState } from "react";
 import { setDBData } from "../utils/db/connect";
 import { toast } from "react-toastify";
@@ -13,7 +13,7 @@ interface MemberFormElement extends HTMLFormElement {
 }
 
 const EditPage = () => {
-  const { data, fetchData } = useAppContext();
+  const { datas, fetchData } = useAppContext();
   const [editedData, setEditedData] = useState<MemberPUB>();
   const { id } = useParams();
   const generations = [
@@ -34,8 +34,8 @@ const EditPage = () => {
     },
   ];
   useEffect(() => {
-    setEditedData(data.find((item) => item.id === id));
-  }, [data, id]);
+    setEditedData(datas.find((item) => item.id === id));
+  }, [datas, id]);
 
   const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -76,7 +76,7 @@ const EditPage = () => {
     toast.success("Data Berhasil Di Update, anda bisa menutup tab ini", defaultSettings);
   };
   const saveData = (memberData: MemberPUB) => {
-    const temp = data.map((item) =>
+    const temp = datas.map((item) =>
       item.id === memberData?.id ? memberData : item
     );
     setDBData(temp as MemberPUB[]);

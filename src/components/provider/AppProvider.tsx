@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { MemberPUB } from "../../types/types";
+import { MemberPUB } from "../../types";
 import Cookies from "universal-cookie";
 import { getData, getHistory } from "../../utils/db/connect";
 import { toast } from "react-toastify";
@@ -9,14 +9,14 @@ import { defaultSettings } from "../../utils/toastConfig";
 // Define the shape of the context
 export interface AppContextType {
   t: Date;
-  data: MemberPUB[];
-  filteredData: MemberPUB[];
+  datas: MemberPUB[];
+  filteredDatas: MemberPUB[];
   handlePrayerTime: (time: React.ChangeEvent<HTMLSelectElement>) => void;
   setDormitory: (dormitory: string) => void;
   dormitory: string;
   fetchData: () => void;
   fetchDataHistory: () => void;
-  showIsAdmin: boolean;
+  isAdmin: boolean;
   isLoading: boolean;
   setMenu: (value: number) => void;
   menu: number;
@@ -36,8 +36,8 @@ export const AppContext = createContext<AppContextType | undefined>(undefined);
 // Define provider component
 const AppProvider = ({ children }: { children: ReactNode }) => {
   const t = new Date();
-  const [data, setData] = useState<MemberPUB[]>([]);
-  const [filteredData, setFilteredData] = useState<MemberPUB[]>([]);
+  const [datas, setDatas] = useState<MemberPUB[]>([]);
+  const [filteredDatas, setFilteredDatas] = useState<MemberPUB[]>([]);
   const [histories, setHistories] = useState<MemberPUB[]>([]);
   const [date, setDate] = useState<number>(t.getDate());
   const [month, setMonth] = useState<number>(t.getMonth() + 1);
@@ -57,7 +57,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   ];
 
   const cookies = new Cookies();
-  const showIsAdmin: boolean = JSON.parse(cookies.get("loggedIn") || "false");
+  const isAdmin: boolean = JSON.parse(cookies.get("loggedIn") || "false");
   const [isOnline, setIsOnline] = useState<boolean>(navigator.onLine);
 
   useEffect(() => {
@@ -88,7 +88,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     getData()
       .then((response) => {
         if (response.hasChildren()) {
-          setData(response.val());
+          setDatas(response.val());
           setIsLoading(false);
         }
       })
@@ -120,12 +120,12 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const dataFiltered =
-      data &&
-      data.filter((item) => {
+      datas &&
+      datas.filter((item) => {
         if (item.dormitory === dormitory) return item;
       });
-    setFilteredData(dataFiltered);
-  }, [data, dormitory]);
+    setFilteredDatas(dataFiltered);
+  }, [datas, dormitory]);
 
   useEffect(() => {
     if (isOnline) fetchDataHistory();
@@ -139,14 +139,14 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     <AppContext.Provider
       value={{
         t,
-        data,
-        filteredData,
+        datas,
+        filteredDatas,
         handlePrayerTime,
         setDormitory,
         dormitory,
         fetchData,
         fetchDataHistory,
-        showIsAdmin,
+        isAdmin,
         isLoading,
         menu,
         setMenu,

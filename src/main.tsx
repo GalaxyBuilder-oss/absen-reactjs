@@ -14,6 +14,7 @@ import {
   HomePage,
   LoginPage,
   ReportPage,
+  SettingsPage,
 } from "./pages";
 
 const router = createBrowserRouter([
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
       {
         path: "/copy",
         element: <ClipboardPage />,
+      },
+      {
+        path: "/settings",
+        element: <SettingsPage />,
       },
       {
         path: "/report",

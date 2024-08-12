@@ -1,16 +1,20 @@
 import { ReactNode } from "react";
 
- 
 interface FormGroupProps {
-  children: ReactNode
+  children: ReactNode;
+  className?: string;
 }
 
-const FormGroup: React.FC<FormGroupProps> = ({ children }) => {
+const FormGroup: React.FC<FormGroupProps> = ({ children, className }) => {
   return (
-    <div className="flex gap-2 justify-between align-middle items-center">
-      <>
-        {children}
-      </>
+    <div
+      className={
+        className
+          ? className
+          : "flex gap-2 justify-between align-middle items-center"
+      }
+    >
+      <>{children}</>
     </div>
   );
 };

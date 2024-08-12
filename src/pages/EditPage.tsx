@@ -13,26 +13,10 @@ interface MemberFormElement extends HTMLFormElement {
 }
 
 const EditPage = () => {
-  const { datas, fetchData } = useAppContext();
+  const { datas, fetchData, generations } = useAppContext();
   const [editedData, setEditedData] = useState<MemberPUB>();
   const { id } = useParams();
-  const generations = [
-    {
-      no: 20,
-      name: "integer",
-      count: 10,
-    },
-    {
-      no: 21,
-      name: "getch",
-      count: 30,
-    },
-    {
-      no: 22,
-      name: "include",
-      count: 35,
-    },
-  ];
+
   useEffect(() => {
     setEditedData(datas.find((item) => item.id === id));
   }, [datas, id]);
@@ -42,13 +26,15 @@ const EditPage = () => {
     const form = e.target as MemberFormElement;
     const memberName = form.memberName.value.trim();
     const dormitory = form.dormitory.value.trim();
+    const point = parseInt(form.point.value.trim());
     const generation = generations.find(
       (gen) => gen.name === form.generation.value.trim()
     );
 
-    if (!memberName) return; // Jika input kosong, hentikan fungsi
-    if (!dormitory) return; // Jika input kosong, hentikan fungsi
-    if (!generation) return; // Jika input kosong, hentikan fungsi
+    if (!memberName) return;
+    if (!dormitory) return;
+    if (!generation) return;
+    if (!point) return;
 
     const capitalizeFirstLetter = (str: string) => {
       return str.charAt(0).toUpperCase() + str.slice(1);
@@ -64,11 +50,11 @@ const EditPage = () => {
       name: capitalizedValue,
       dormitory: dormitory,
       generation: generation,
-      point: editedData?.point,
-      alpha: false,
-      permit: false,
-      late: false,
-      present: false,
+      point: point,
+      alpha: editedData?.alpha as boolean,
+      permit: editedData?.permit as boolean,
+      late: editedData?.late as boolean,
+      present: editedData?.present as boolean,
     };
 
     saveData(dataNew);
@@ -144,11 +130,23 @@ const EditPage = () => {
                   </select>
                 </div>
                 <div className="flex flex-col gap-2 p-2">
+                  <label htmlFor="nama" className="px-4">
+                    SISA POIN
+                  </label>
+                  <input
+                    type="number"
+                    name="point"
+                    id="nama"
+                    defaultValue={editedData?.point}
+                    className="border capitalize p-3 rounded-full"
+                  />
+                </div>
+                <div className="flex flex-col gap-2 p-2">
                   <button
                     type="submit"
                     className="border capitalize p-3 rounded-full hover:bg-slate-100"
                   >
-                    Save
+                    Simpan
                   </button>
                 </div>
               </form>

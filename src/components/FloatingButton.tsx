@@ -1,4 +1,4 @@
-import { CopyIcon, HistoryIcon, Plus, PlusIcon, SaveIcon } from "lucide-react";
+import { CopyIcon, Files, HistoryIcon, Plus, PlusIcon, SaveIcon } from "lucide-react";
 import { addHistory, setDBData } from "../utils/db/connect";
 import { toast } from "react-toastify";
 import { defaultSettings } from "../utils/toastConfig";
@@ -6,10 +6,12 @@ import { MemberPUB } from "../types";
 import { Fab, Action } from "react-tiny-fab";
 import "react-tiny-fab/dist/styles.css";
 import { useAppContext } from "./provider/useAppContext";
+import { useNavigate } from "react-router-dom";
 
 const FloatingButton = () => {
   const { t, datas, selectedPrayerTime, dormitory, isAdmin, fetchData } =
     useAppContext();
+    const navigate = useNavigate()
   const DATE = t.getDate();
   const MONTH_NUM = t.getMonth() + 1;
   const YEAR = t.getFullYear();
@@ -52,7 +54,7 @@ const FloatingButton = () => {
       MONTH_NUM,
       DATE
     )
-      .then(() => toast.success("Saved To History Success!", defaultSettings))
+      .then(() => toast.success("Berhasil Simpan Ke Riwayat!", defaultSettings))
       .catch((e) => console.error(e));
 
     datas.forEach((item) => {
@@ -83,7 +85,7 @@ const FloatingButton = () => {
     document.querySelectorAll<HTMLInputElement>("#dormy").forEach((e) => {
       e.checked = false;
     });
-    toast.success("Copied Success!", defaultSettings);
+    toast.success("Salin Berhasil!", defaultSettings);
   };
 
   if (isAdmin)
@@ -102,9 +104,20 @@ const FloatingButton = () => {
             }}
           >
             <Action
-              text="View History"
               onClick={() => {
-                location.href = "/history";
+                navigate("/add");
+              }}
+              text="Tambah"
+              style={{
+                backgroundColor: "rgb(22 163 74)",
+              }}
+            >
+              <Plus />
+            </Action>
+            <Action
+              text="Lihat Riwayat"
+              onClick={() => {
+                navigate("/history");
               }}
               style={{
                 backgroundColor: "rgb(22 163 74)",
@@ -113,18 +126,7 @@ const FloatingButton = () => {
               <HistoryIcon />
             </Action>
             <Action
-              onClick={() => {
-                location.href = "/add";
-              }}
-              text="Add"
-              style={{
-                backgroundColor: "rgb(22 163 74)",
-              }}
-            >
-              <Plus />
-            </Action>
-            <Action
-              text="Copy To Clipboard"
+              text="Salin Ke Papan Klip"
               style={{
                 backgroundColor: "rgb(22 163 74)",
               }}
@@ -133,7 +135,7 @@ const FloatingButton = () => {
               <CopyIcon />
             </Action>
             <Action
-              text="Save To History"
+              text="Simpan Ke Riwayat"
               onClick={handleSaveHistory}
               style={{
                 backgroundColor: "rgb(22 163 74)",
@@ -141,16 +143,24 @@ const FloatingButton = () => {
             >
               <SaveIcon />
             </Action>
+            <Action
+              text="Buat Laporan"
+              onClick={()=>navigate("/report")}
+              style={{
+                backgroundColor: "rgb(22 163 74)",
+              }}
+            >
+              <Files />
+            </Action>
           </Fab>
         </div>
-        <div className="absolute hidden lg:block">
-          <button className="flex" onClick={handleCopy}>
-            <CopyIcon /> Save To Clipboard
+        <div className="absolute hidden bottom-36 right-0 lg:flex flex-col gap-4 bg-white bg-opacity-75 p-4">
+          <button onClick={handleCopy} title="Salin Ke Papan Klip" className="hover:bg-slate-100 p-3 rounded-full">
+             <CopyIcon />
           </button>
-          <button className="flex" onClick={handleSaveHistory}>
-            <SaveIcon /> Save To History
+          <button onClick={handleSaveHistory} title="Simpan Ke Riwayat" className="hover:bg-slate-100 p-3 rounded-full">
+             <SaveIcon />
           </button>
-
         </div>
       </>
     );

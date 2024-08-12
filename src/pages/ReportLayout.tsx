@@ -1,27 +1,11 @@
 import moment from "moment";
-import { PDFDownloadLink } from "@react-pdf/renderer";
-import PDFLayout from "../components/PDFLayout";
 import { Authentication, ListHead, useAppContext } from "../components";
 import { MemberPUB, WeekDate } from "../types";
 import { useEffect, useState } from "react";
-import { getHistory } from "../utils/db/connect";
+import { getHistory, setDBData } from "../utils/db/connect";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-
-function generateReport() {
-  const pdf = new jsPDF({
-    orientation: "landscape",
-  });
-  autoTable(pdf, {
-    html: "#report-table",
-    theme: "striped",
-    useCss: true,
-  });
-
-  const date = Date().split(" ");
-  const dateStr = `${date[0]}_${date[1]}_${date[2]}_${date[3]}`;
-  pdf.save(`Laporan Absensi Mingguan_${dateStr}.pdf`);
-}
+import { Link } from "react-router-dom";
 
 const getWeekDates = (startDate: Date): WeekDate[] => {
   const fridayOffset =
@@ -110,6 +94,33 @@ const ReportLayout = () => {
     setMinus(newMinus);
   };
 
+  function generateReport() {
+    const pdf = new jsPDF({
+      orientation: "landscape",
+    });
+    autoTable(pdf, {
+      html: "#report-table",
+      theme: "striped",
+      useCss: true,
+    });
+
+    const date = Date().split(" ");
+    const dateStr = `${date[0]}_${date[1]}_${date[2]}_${date[3]}`;
+    pdf.save(`Laporan Absensi Mingguan_${dateStr}.pdf`);
+
+    datas.forEach((item) => {
+      if (item.dormitory === dormitory) {
+        minus.forEach((data) => {
+          if (item.id === data.idMember)
+            item.point = (item.point as number) - data.totalPoint;
+        });
+      }
+    });
+    console.log(datas)
+    setDBData(datas);
+    fetchData();
+  }
+
   useEffect(() => {
     fetchData();
   }, [startDate, dateOfWeek, datas, dormitory, prayerTimeList]);
@@ -122,40 +133,41 @@ const ReportLayout = () => {
     <Authentication>
       <main className="sm:w-[98vw] h-[72vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
         <div className="h-[72vh] rounded-lg bg-white relative py-2">
+          <div className="flex px-2 py-4 gap-4">
+            <Link to="/">&lt;- Back</Link>
+          </div>
           <ListHead />
           <div className="h-[58vh] bg-gray-50 px-8 py-8 rounded-xl overflow-y-scroll flex flex-col items-center">
-            <div className="flex items-center mb-4">
-              <label htmlFor="start-date" className="mr-2">
-                Pilih tanggal mulai:
-              </label>
-              <input
-                type="date"
-                id="start-date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="border p-2"
-              />
-            </div>
-            <button onClick={() => generateReport()}>
-              Generate Report
-            </button>
-            <PDFDownloadLink
-              document={
-                <PDFLayout
-                  datas={datas}
-                  dormitory={dormitory}
-                  dateOfWeek={dateOfWeek}
-                  startDate={startDate}
-                  prayerTimeList={prayerTimeList}
+            <div className="w-full flex my-4 items-center gap-4 justify-between">
+              <div className="flex items-center">
+                <label htmlFor="start-date" className="mr-2">
+                  Pilih tanggal mulai:
+                </label>
+                <input
+                  type="date"
+                  id="start-date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="w-10 sm:w-auto border p-2 rounded-lg"
                 />
-              }
-              fileName="contoh.pdf"
-            >
-              {({ loading }) =>
-                loading ? "Loading document..." : <button>Download now!</button>
-              }
-            </PDFDownloadLink>
-            <table id="report-table" className="border">
+              </div>
+              <button
+                className="sm:p-4 border rounded-lg bg-white hover:bg-slate-50 hover:scale-95 shadow hover:shadow-none transition-all"
+                onClick={() => generateReport()}
+              >
+                Buat Laporan
+              </button>
+            </div>
+            <h3 className="m-2">
+              Pratinjau Laporan Per {dateOfWeek[0].date} s/d{" "}
+              {dateOfWeek[dateOfWeek.length - 1].formattedDate}{" "}
+              {moment().format("YYYY")} :
+            </h3>
+            <div className="block lg:hidden text-center font-mono opacity-50">
+              Pratinjau Hanya Muncul Di Layar Laptop 1280 px x 720 Keatas.
+              Pratinjau Tidak Tersedia Di Tampilan Hp Atau Tablet.
+            </div>
+            <table id="report-table" className="border hidden lg:block">
               <thead>
                 <tr className="border p-2">
                   <th colSpan={11}>

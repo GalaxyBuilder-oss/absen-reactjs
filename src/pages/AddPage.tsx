@@ -5,6 +5,7 @@ import { FormEvent, ReactNode, useState } from "react";
 import { defaultSettings } from "../utils/toastConfig";
 import { Generation, MemberPUB } from "../types";
 import { Authentication, useAppContext } from "../components";
+import { Link } from "react-router-dom";
 
 interface GenerationFormElement extends HTMLFormElement {
   genName: HTMLInputElement;
@@ -18,26 +19,9 @@ interface MemberFormElement extends HTMLFormElement {
 }
 
 const AddPage = () => {
-  const { datas, fetchData } = useAppContext();
+  const { datas, fetchData, generations, setGenerations } = useAppContext();
 
   const [tab, setTab] = useState(0);
-  const [generations, setGenerations] = useState<Generation[]>([
-    {
-      no: 20,
-      name: "integer",
-      count: 10,
-    },
-    {
-      no: 21,
-      name: "getch",
-      count: 30,
-    },
-    {
-      no: 22,
-      name: "include",
-      count: 35,
-    },
-  ]);
 
   const handleAddGen = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,20 +29,20 @@ const AddPage = () => {
     let genNumber = form.genNo.value.trim();
     let genName = form.genName.value.trim();
 
-    if (!genName) return toast.error("Name Cannot Be Empty!", defaultSettings);
+    if (!genName) return toast.error("Nama Tidak Boleh Kosong!", defaultSettings);
     if (!genNumber)
-      return toast.error("Please Select Generation Number!", defaultSettings);
+      return toast.error("Pilih Nomor Angkatan!", defaultSettings);
     if (generations.some((gen) => gen.name === genName))
       return toast.error(
-        `Generation ${genName} already exists`,
+        `Angkatan ${genName} telah ada`,
         defaultSettings
       );
     if (generations.some((gen) => gen.no.toString() === genNumber))
       return toast.error(
-        `Generation ${genNumber} already exists with another name`,
+        `Angkatan ${genNumber} telah ada dengan nama lain`,
         defaultSettings
       );
-    const newGen = {
+    const newGen: Generation = {
       no: parseInt(genNumber, 10),
       name: genName,
       count: 0,
@@ -66,7 +50,7 @@ const AddPage = () => {
     setGenerations([...generations, newGen]);
     genName = "";
     genNumber = "";
-    toast.success("Successfully Add Generations", defaultSettings);
+    toast.success("Berhasil Menambah Angkatan", defaultSettings);
   };
 
   const handleAddMember = async (e: FormEvent<HTMLFormElement>) => {
@@ -104,7 +88,7 @@ const AddPage = () => {
 
     await addData(dataNew, datas != null || datas ? datas.length : 0)
       .then(() => {
-        toast.success("Successfully Add New Member", defaultSettings);
+        toast.success("Berhasil Menambah Member", defaultSettings);
         fetchData();
       })
       .catch((e) => toast.error(e.message, defaultSettings));
@@ -125,6 +109,11 @@ const AddPage = () => {
       <main className="sm:w-[98vw] h-[72vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
         <div className="h-[72vh] lg:h-[76vh] rounded-lg bg-white relative px-2 overflow-y-scroll">
           <div className="flex px-2 py-4 gap-4">
+            <Link to='/'>
+            &lt;- Back
+            </Link>
+          </div>
+          <div className="flex px-2 pb-4 gap-4">
             <button
               onClick={() => setTab(0)}
               disabled={tab === 0}

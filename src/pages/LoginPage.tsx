@@ -4,7 +4,7 @@ import Cookies from "universal-cookie";
 import { FormEvent } from "react";
 import { toast } from "react-toastify";
 import { defaultSettings } from "../utils/toastConfig";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const navigate = useNavigate()
@@ -71,6 +71,11 @@ const LoginPage = () => {
     <>
       <main className="sm:w-[98vw] h-[72vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
         <div className="h-[72vh] rounded-lg bg-white relative py-2">
+        <div className="flex px-2 py-4 gap-4">
+            <Link to='/'>
+            &lt;- Back
+            </Link>
+          </div>
           <div className="bg-gray-50 h-full px-4 py-8 rounded-xl overflow-y-scroll">
             {currentUser ? (
               <>

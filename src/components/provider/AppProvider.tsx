@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { MemberPUB } from "../../types";
+import { Generation, MemberPUB } from "../../types";
 import Cookies from "universal-cookie";
 import { getData, getHistory } from "../../utils/db/connect";
 import { toast } from "react-toastify";
@@ -28,6 +28,8 @@ export interface AppContextType {
   dormitories: string[];
   prayerTimeList: string[];
   isOnline: boolean;
+  generations: Generation[];
+  setGenerations: (arg0: Generation[]) => void;
 }
 
 // Create context with default values
@@ -47,6 +49,23 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const [selectedPrayerTime, setSelectedPrayerTime] =
     useState<string>("Shubuh");
   const [dormitory, setDormitory] = useState<string>("Asrama Ikhwan");
+  const [generations, setGenerations] = useState<Generation[]>([
+    {
+      no: 20,
+      name: "integer",
+      count: 10,
+    },
+    {
+      no: 21,
+      name: "getch",
+      count: 30,
+    },
+    {
+      no: 22,
+      name: "include",
+      count: 35,
+    },
+  ]);
   const prayerTimeList = ["Shubuh", "Dzuhur", "Ashar", "Maghrib", "Isya"];
 
   const dormitories: string[] = [
@@ -158,6 +177,8 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         dormitories,
         prayerTimeList,
         isOnline,
+        generations,
+        setGenerations
       }}
     >
       {children}

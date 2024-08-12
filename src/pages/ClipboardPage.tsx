@@ -3,10 +3,11 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { defaultSettings } from "../utils/toastConfig";
 import { MemberPUB } from "../types";
 import { useAppContext } from "../components";
+import { Link } from "react-router-dom";
 
 const ClipboardPage = () => {
   const [dormy, setDormy] = useState<string[]>([]);
-  const {handlePrayerTime, data, fetchData, selectedPrayerTime, dormitories, t, prayerTimeList} = useAppContext()
+  const {handlePrayerTime, datas, fetchData, selectedPrayerTime, dormitories, t, prayerTimeList} = useAppContext()
 
   const dateProperties = {
     months: [
@@ -38,8 +39,8 @@ const ClipboardPage = () => {
   };
 
   const handleClick = () => {
-    const alphaList = filterList(data, "alpha");
-    const permitList = filterList(data, "permit");
+    const alphaList = filterList(datas, "alpha");
+    const permitList = filterList(datas, "permit");
     const formattedDate = `${DAYS.toUpperCase()}, ${DATE} ${MONTH.toUpperCase()} ${YEAR}`;
     const text = `*SHALAT ${selectedPrayerTime.toUpperCase()} HARI ${formattedDate}*\n\nTidak Hadir:\n${alphaList}\n\nIzin:\n${permitList}\n\n*Catatan:*\n- *Konfirmasi Kehadiran Atau Izin Lewat Wa Div Kerohanian Yang Mencatat*\n- *Jika Poin Izin Habis Maka Tidak Bisa Izin Lagi, poin izin akan di reset setelah pembinaan*`;
     navigator.clipboard.writeText(text);
@@ -63,7 +64,11 @@ const ClipboardPage = () => {
   return (
     <main className="sm:w-[98vw] h-[72vh] mx-2 bg-green-600 px-4 border-green-600 transition-all">
       <div className="h-[72vh] rounded-lg bg-white relative p-4">
-        <a href="/">&lt;- Back</a>
+      <div className="flex px-2 py-4 gap-4">
+            <Link to='/'>
+            &lt;- Back
+            </Link>
+          </div>
         <div>
           Waktu Sholat :
           <select

@@ -1,4 +1,4 @@
-import { useRouteError } from "react-router-dom";
+import { Link, useRouteError } from "react-router-dom";
 import Footer from "../components/Footer";
 import NavigationBar from "../components/NavigationBar";
 import { useEffect } from "react";
@@ -42,13 +42,13 @@ const ErrorPage = () => {
             <h3>Error {error?.status} :</h3>
             <p>{errorMessage}</p>
             <p className="my-4">
-              <a href="/help" className="text-blue-500 underline">
+              <Link to="/help" className="text-blue-500 underline">
                 See our FAQs for more info
-              </a>
+              </Link>
             </p>
-            <a href="/" className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold">
+            <Link to="/" className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold">
               Go Home
-            </a>
+            </Link>
           </div>
         </div>
       </main>

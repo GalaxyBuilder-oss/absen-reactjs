@@ -53,7 +53,7 @@ const NavigationBar = () => {
                     to="/report"
                     className="bg-gray-50 hover:bg-green-600 hover:text-gray-50 transition-all hover:animate-pulse text-green-600 py-2 px-4 rounded-full font-bold"
                   >
-                    Laporan
+                    Laporan Mingguan
                   </Link>
                 )}
               </>

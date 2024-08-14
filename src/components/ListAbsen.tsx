@@ -106,7 +106,6 @@ const ListAbsen = () => {
           </div>
         ) : filteredDatas != null && filteredDatas.length > 0 ? (
           filteredDatas
-            .sort((a, b) => a.name.localeCompare(b.name))
             .map((item, i) => (
               <div
                 key={i}

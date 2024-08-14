@@ -4,6 +4,7 @@ export { default as AppProvider } from "./provider/AppProvider"
 export { default as Authentication } from "./auth/Authentication"
 export { useAppContext } from "./provider/useAppContext"
 export { default as ListHead } from "./ListHead";
+export { default as ListHeadReport } from "./ListHeadReport";
 export { default as ListAbsen } from "./ListAbsen";
 export { default as ListHeadHistory } from "./ListHeadHistory"
 export { default as HistoryList } from "./HistoryList"

@@ -140,9 +140,11 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const dataFiltered =
       datas &&
-      datas.filter((item) => {
-        if (item.dormitory === dormitory) return item;
-      });
+      datas
+        .filter((item) => {
+          if (item.dormitory === dormitory) return item;
+        })
+        .sort((a, b) => a.name.localeCompare(b.name));
     setFilteredDatas(dataFiltered);
   }, [datas, dormitory]);
 
@@ -178,7 +180,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         prayerTimeList,
         isOnline,
         generations,
-        setGenerations
+        setGenerations,
       }}
     >
       {children}

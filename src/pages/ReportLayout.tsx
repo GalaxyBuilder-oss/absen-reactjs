@@ -1,7 +1,7 @@
 import moment from "moment";
-import { Authentication, ListHead, useAppContext } from "../components";
+import { Authentication, ListHeadReport, useAppContext } from "../components";
 import { MemberPUB, WeekDate } from "../types";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getHistory, setDBData } from "../utils/db/connect";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -38,18 +38,19 @@ interface PoinMinus {
 }
 
 const ReportLayout = () => {
-  const { dormitory, datas, prayerTimeList } = useAppContext();
+  const { dormitory, datas, filteredDatas, prayerTimeList, fetchData } =
+    useAppContext();
   const [minus, setMinus] = useState<PoinMinus[]>([]);
   const [startDate, setStartDate] = useState<string>(() =>
     moment().format("YYYY-MM-DD")
   );
   const dateOfWeek = getWeekDates(new Date(startDate));
 
-  const fetchData = async () => {
+  const fetchHistory = useCallback(async () => {
     const newMinus: PoinMinus[] = [];
 
     const requests = dateOfWeek.flatMap((date) =>
-      datas.map(async (item) => {
+      filteredDatas.map(async (item) => {
         for (const prayerTime of prayerTimeList) {
           try {
             const res = await getHistory(
@@ -63,19 +64,28 @@ const ReportLayout = () => {
             const data = res.val();
             if (data) {
               data.forEach((data: MemberPUB) => {
-                if (data.id === item.id && data.alpha === true) {
-                  const temp: PoinMinus = {
-                    idMember: data.id as string,
-                    date: date.formattedDate,
-                    totalPoint: 2,
-                  };
+                let temp: PoinMinus | undefined;
+                if (data.id === item.id && (data.alpha || data.late)) {
+                  if (data.alpha)
+                    temp = {
+                      idMember: data.id as string,
+                      date: date.formattedDate,
+                      totalPoint: 2,
+                    };
+                  if (data.late)
+                    temp = {
+                      idMember: data.id as string,
+                      date: date.formattedDate,
+                      totalPoint: 1,
+                    };
 
                   if (
                     !newMinus.some(
                       (entry) =>
                         entry.idMember === data.id &&
                         entry.date === date.formattedDate
-                    )
+                    ) &&
+                    temp !== undefined
                   ) {
                     newMinus.push(temp);
                   }
@@ -92,7 +102,7 @@ const ReportLayout = () => {
     await Promise.all(requests);
 
     setMinus(newMinus);
-  };
+  }, [dateOfWeek, filteredDatas, dormitory, prayerTimeList]);
 
   function generateReport() {
     const pdf = new jsPDF({
@@ -116,14 +126,16 @@ const ReportLayout = () => {
         });
       }
     });
-    console.log(datas)
     setDBData(datas);
     fetchData();
   }
 
   useEffect(() => {
-    fetchData();
-  }, [startDate, dateOfWeek, datas, dormitory, prayerTimeList]);
+    const fetchHistoryAsync = async () => {
+      await fetchHistory();
+    };
+    fetchHistoryAsync();
+  }, [fetchHistory]);
 
   useEffect(() => {
     console.log("Minus data:", minus);
@@ -136,7 +148,7 @@ const ReportLayout = () => {
           <div className="flex px-2 py-4 gap-4">
             <Link to="/">&lt;- Back</Link>
           </div>
-          <ListHead />
+          <ListHeadReport />
           <div className="h-[58vh] bg-gray-50 px-8 py-8 rounded-xl overflow-y-scroll flex flex-col items-center">
             <div className="w-full flex my-4 items-center gap-4 justify-between">
               <div className="flex items-center">
@@ -169,7 +181,7 @@ const ReportLayout = () => {
             </div>
             <table id="report-table" className="border hidden lg:block">
               <thead>
-                <tr className="border p-2">
+                <tr className="border p-2 text-2xl">
                   <th colSpan={11}>
                     REKAPITULASI POIN MINGGUAN {dormitory.toUpperCase()}
                   </th>
@@ -206,47 +218,60 @@ const ReportLayout = () => {
                 </tr>
               </thead>
               <tbody>
-                {datas != null &&
-                  datas
-                    .filter((item) => item.dormitory === dormitory)
-                    .sort((a, b) => a.name.localeCompare(b.name))
-                    .map((item, i) => {
-                      const totalPoints = minus
-                        .filter((data) => data.idMember === item.id)
-                        .reduce((acc, data) => acc + data.totalPoint, 0);
+                {filteredDatas &&
+                  filteredDatas.map((item, i) => {
+                    const totalPoints = minus
+                      .filter((data) => data.idMember === item.id)
+                      .reduce((acc, data) => acc + data.totalPoint, 0);
 
-                      return (
-                        <tr key={i} className="border p-2 text-center">
-                          <td className="border p-2">{i + 1}</td>
-                          <td className="text-left border p-2">{item.name}</td>
-                          <td className="border p-2">
-                            {10 - (item.point as number)}
-                          </td>
-                          {dateOfWeek.map((date, index) => {
-                            const dailyPoints = minus
-                              .filter(
-                                (data) =>
-                                  data.idMember === item.id &&
-                                  data.date === date.formattedDate
-                              )
-                              .reduce((acc, data) => acc + data.totalPoint, 0);
+                    return (
+                      <tr
+                        key={i}
+                        className={`border p-2 text-center ${
+                          item.point && item.point < 5 && item.point > 1
+                            ? "bg-yellow-300"
+                            : item.point && item.point < 2
+                            ? "bg-red-600 text-white"
+                            : "bg-none"
+                        }`}
+                      >
+                        <td className="border p-2">{i + 1}</td>
+                        <td className="text-left border p-2">{item.name}</td>
+                        <td className="border p-2">
+                          {10 - (item.point as number)}
+                        </td>
+                        {dateOfWeek.map((date, index) => {
+                          const dailyPoints = minus
+                            .filter(
+                              (data) =>
+                                data.idMember === item.id &&
+                                data.date === date.formattedDate
+                            )
+                            .reduce((acc, data) => acc + data.totalPoint, 0);
 
-                            return (
-                              <td
-                                key={index}
-                                className={`border p-2 ${
-                                  date.day === moment().format("dddd") &&
-                                  "font-bold text-lg bg-white"
-                                }`}
-                              >
-                                {dailyPoints || 0}
-                              </td>
-                            );
-                          })}
-                          <td className="border p-2">{totalPoints}</td>
-                        </tr>
-                      );
-                    })}
+                          return (
+                            <td
+                              key={index}
+                              className={`border p-2 ${
+                                date.day === moment().format("dddd")
+                                  ? "font-bold text-lg bg-white text-black"
+                                  : item.point &&
+                                    item.point < 5 &&
+                                    item.point > 1
+                                  ? "bg-yellow-300"
+                                  : item.point && item.point < 2
+                                  ? "bg-red-600 text-white"
+                                  : "bg-none"
+                              }`}
+                            >
+                              {dailyPoints || 0}
+                            </td>
+                          );
+                        })}
+                        <td className="border p-2">{totalPoints}</td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
           </div>

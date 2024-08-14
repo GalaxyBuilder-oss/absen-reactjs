@@ -86,6 +86,13 @@ const AboutPage = () => {
               mahasiswa.
             </li>
           </ul>
+          <hr className="my-4" />
+          <div >
+            <h4 className="font-semibold text-xl">Kontak Kami</h4>
+            <ul className="contacts text-justify flex flex-col gap-4 indent-4">
+              E-mail: galaxybuilder.oss@gmail.com
+            </ul>
+          </div>
         </div>
       </div>
     </main>
